@@ -73,3 +73,47 @@
 
 1. 所有的React组件必须像纯函数那样使用它们的props。
     > 纯函数: 没有改变它自己的输入值，当传入的值相同时，总是会返回相同的结果。
+
+
+## state 和 生命周期
+> state 是一个局部的、只能被组件自身控制的数据源。state 中状态可以通过 this.setState 方法进行更新，setState 会导致组件的重新渲染。
+
+> props 的主要作用是让使用该组件的父组件可以传入参数来配置该组件。它是外部传进来的配置参数，组件内部无法控制也无法修改。除非外部组件主动传入新的 props，否则组件的 props 永远保持不变。
+
+1. 组件第一次加载到DOM中的时候，被称为 挂载
+   生成的这个DOM被移除的时候，被称为 卸载
+
+2. 当组件输出到 DOM 后会执行
+``` 
+componentDidMount() 
+```
+钩子
+
+   组件被从DOM中移除，React会调用
+   ```
+   componentWillUnmount()
+   ```
+   这个钩子函数
+
+## 事件处理
+1. 与DOM元素的区别
+    - React事件绑定属性的命名采用驼峰式写法，而不是小写。
+    - 如果采用 JSX 的语法你需要传入一个函数作为事件处理函数，而不是一个字符串(DOM元素的写法)
+    - 不能使用返回 false 的方式阻止默认行为，而必须明确的使用 preventDefault
+
+2. 
+    ```
+        <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+        <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
+    ```
+    - 参数 e 作为 React 事件对象将会被作为第二个参数进行传递。通过箭头函数的方式，事件对象必须显式的进行传递
+    - 通过 bind 方式，事件对象以及更多的参数将会被隐式的进行传递。
+    - 通过 bind 方式向监听函数传参，在类组件中定义的监听函数，事件对象 e 要排在所传递参数的后面
+## 条件渲染
+1. 在 JavaScript 中，true && expression 总是返回 expression，而 false && expression 总是返回 false。
+   因此，如果条件是 true，&& 右侧的元素就会被渲染，如果是 false，React 会忽略并跳过它。
+
+2. 组件的 render 方法返回 null 并不会影响该组件生命周期方法的回调。
+   例如，componentWillUpdate 和 componentDidUpdate 依然可以被调用。
+
+> 类似于 <input />、<select />、<textarea> 这些元素的 value 值被 React.js 所控制、渲染的组件，在 React.js 当中被称为受控组件（Controlled Component）。对于用户可输入的控件，一般都可以让它们成为受控组件，这是 React.js 所推崇的做法。
