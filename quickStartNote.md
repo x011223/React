@@ -117,3 +117,63 @@ componentDidMount()
    例如，componentWillUpdate 和 componentDidUpdate 依然可以被调用。
 
 > 类似于 <input />、<select />、<textarea> 这些元素的 value 值被 React.js 所控制、渲染的组件，在 React.js 当中被称为受控组件（Controlled Component）。对于用户可输入的控件，一般都可以让它们成为受控组件，这是 React.js 所推崇的做法。
+
+### 更新阶段的组件生命周期
+
+1. shouldComponentUpdate(nextProps, nextState)：你可以通过这个方法控制组件是否重新渲染。如果返回 false 组件就不会重新渲染。这个生命周期在 React.js 性能优化上非常有用。
+2. componentWillReceiveProps(nextProps)：组件从父组件接收到新的 props 之前调用。
+3. componentWillUpdate()：组件开始重新渲染之前调用。
+4. componentDidUpdate()：组件重新渲染并且把更改变更到真实的 DOM 以后调用。
+
+## 组合 VS 继承
+> 通过配置属性用较特殊的组件来渲染较通用的组件
+```
+function Dialog(props) {
+    return (
+        <FancyBorder color="blue">
+            <h1 className="Dialog-title">
+                {props.title}
+            </h1>
+            <p className="Dialog-message">
+                {props.message}
+            </p>
+                {props.children}
+        </FancyBorder>
+    );
+}
+
+class SignUpDialog extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSignUp = this.handleSignUp.bind(this);
+        this.state = {login: ''};
+    }
+
+    render() {
+        return (
+            <Dialog title="Mars Exploration Program"
+                    message="How should we refer to you?">
+            <input value={this.state.login}
+                    onChange={this.handleChange} />
+            <button onClick={this.handleSignUp}>
+                Sign Me Up!
+            </button>
+            </Dialog>
+        );
+    }
+
+    handleChange(e) {
+        this.setState({login: e.target.value});
+    }
+
+    handleSignUp() {
+        alert(`Welcome aboard, ${this.state.login}!`);
+    }
+}
+
+```
+
+## React理念
+1. 单一功能原则
+    - 在理想状况下，一个组件应该只做一件事情。如果这个组件功能不断丰富，它应该被分成更小的组件。
