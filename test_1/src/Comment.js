@@ -5,7 +5,9 @@ import { setInterval } from 'timers';
 class Comment extends Component {
     // 指定参数类型
     static propTypes = {
-        comment: PropTypes.object.isRequired
+        comment: PropTypes.object.isRequired,
+        onDeleteComment: PropTypes.func,
+        index: PropTypes.number
     }
 
     constructor () {
@@ -28,6 +30,22 @@ class Comment extends Component {
         this._timer = setInterval ( this._updateTimeString.bind(this), 5000 )
     }
 
+    handleDeleteComment () {
+        if (this.props.onDeleteComment) {
+            this.props.onDeleteComment(this.props.index)
+        }
+    }
+
+    _getProcessedContent (content) {
+        return content
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+                .replace(/`([\S\s]+?)`/g, '<code>$1</code>')
+    }
+
     render () {
         return (
             <div className='comment'>
@@ -36,11 +54,15 @@ class Comment extends Component {
                         { this.props.comment.userName } 
                     </span>:&nbsp;
                 </div>
-                <p>
-                    { this.props.comment.content }
+                <p dangerouslySetInnerHTML={{
+                    __html: this._getProcessedContent(this.props.comment.content)
+                }}>
                 </p>
                 <span className='comment-createdtime'>
                     { this.state.timeString }
+                </span>
+                <span className='comment-delete' onClick={ this.handleDeleteComment.bind(this) }>
+                    删除
                 </span>
             </div>
         )
