@@ -1,6 +1,12 @@
 // import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 // import './index.css';
+// import React, { Component } from 'react'
+// import PropTypes from 'prop-types'
+// import ReactDOM from 'react-dom'
+// import Header from './header'
+// import Content from './content'
+// import './index.css'
 
 // 与StoreChange合并
 // const appState = {
@@ -20,11 +26,14 @@ function createStore (reducer) {
     const listeners = []
     // 监听数据变化
     const subscribe = (listener) => listeners.push(listener)
+    // 获取数据内容
     const getState = () => state
+    // 提交数据更改
     const dispatch = (action) => {
-        state = storeChange(state, action)
+        state = reducer(state, action)
         listeners.forEach((listener) => listener())
     }
+    // 初始化数据
     dispatch( { } )
     return { getState, dispatch, subscribe }
 }
@@ -64,10 +73,11 @@ function storeChange (state, action) {
     }
 }
 
-const store = createStore(appState, storeChange)
+const store = createStore(storeChange)
 let oldState = store.getState()
 store.subscribe(() => {
     const newState = store.getState() // 数据可能变化，获取新的 state
+    console.log(newState)
     renderApp(oldState, newState) // 把新旧的 state 传进去渲染
     oldState = newState // 渲染完以后，新的 newState 变成了旧的 oldState，等待下一次数据变化重新渲染
 })
@@ -88,17 +98,15 @@ store.subscribe(() => {
 //     }
 // }
 
-store.subscribe(() => renderApp(store.getState()))
-
-function renderApp (oldState = { }, newState) {
+function renderApp (newState, oldState = { }) {
     if (oldState === newState) {
         return
     }
-    renderTitle(oldState.title, newState.title)
-    renderContent(oldState.content, newState.content)
+    renderTitle(newState.title, oldState.title)
+    renderContent(newState.content, oldState.content)
 }
 
-function renderTitle (oldTitle = { }, newTitle) {
+function renderTitle (newTitle, oldTitle = {}) {
     if (oldTitle === newTitle) {
         return
     }
@@ -107,7 +115,7 @@ function renderTitle (oldTitle = { }, newTitle) {
     titleDOM.style.color = newTitle.color
 }
 
-function renderContent (oldContent = { }, newContent) {
+function renderContent (newContent, oldContent = {}) {
     if (oldContent === newContent) {
         return
     }
@@ -136,3 +144,19 @@ store.dispatch({ type: 'UPDATE_TITLE_COLOR', color: 'lightblue' }) // 修改标�
 //     <App />,
 //     document.getElementById('root')
 // );
+
+// class Index extends Component {
+//   render () {
+//     return (
+//       <div>
+//         <Header />
+//         <Content />
+//       </div>
+//     )
+//   }
+// }
+
+// ReactDOM.render(
+//   <Index />,
+//   document.getElementById('root')
+// )
