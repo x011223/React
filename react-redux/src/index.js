@@ -1,22 +1,25 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Header from './Header'
 import Content from './Content'
+// import { Provider } from './connect'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import './index.css'
 
-function createStore (reducer) {
-    let state = null
-    const listeners = []
-    const getState = () => state
-    const subscribe = (listener) => listeners.push(listener)
-    const dispatch = (action) => {
-        state = reducer(state, action)
-        listeners.forEach((listener) => listener() )
-    }
-    dispatch({})
-    return { getState, dispatch, subscribe }
-}
+// function createStore (reducer) {
+//     let state = null
+//     const listeners = []
+//     const getState = () => state
+//     const subscribe = (listener) => listeners.push(listener)
+//     const dispatch = (action) => {
+//         state = reducer(state, action)
+//         listeners.forEach((listener) => listener() )
+//     }
+//     dispatch({})
+//     return { getState, dispatch, subscribe }
+// }
 
 const themeReducer = (state, action) => {
     if (!state) return {
@@ -33,13 +36,13 @@ const themeReducer = (state, action) => {
 const store = createStore(themeReducer)
 
 class Index extends Component {
-    static childContextTypes = {
-        store: PropTypes.object
-    }
+    // static childContextTypes = {
+    //     store: PropTypes.object
+    // }
 
-    getChildContext () {
-        return { store }
-    }
+    // getChildContext () {
+    //     return { store }
+    // }
     render () {
         return (
             <div>
@@ -51,6 +54,9 @@ class Index extends Component {
 }
 
 ReactDOM.render(
-    <Index />,
+    <Provider store={store}>
+        <Index />
+    </Provider>,
+    // <Index />,
     document.getElementById('root')
 )

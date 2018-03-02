@@ -105,3 +105,10 @@ renderApp(store.getState())
 // 后面可以随意 dispatch 了，页面自动更新
 store.dispatch(...)
 ```
+
+## Smart 和 Dumb 
+1. 根据是否需要高度的复用性，把组件划分为 Dumb 和 Smart 组件，约定俗成地把它们分别放到 components 和 containers 目录下。
+
+2. Dumb 基本只做一件事情 —— 根据 props 进行渲染。而 Smart 则是负责应用的逻辑、数据，把所有相关的 Dumb（Smart）组件组合起来，通过 props 控制它们。
+
+3. Smart 组件可以使用 Smart、Dumb 组件；而 Dumb 组件最好只使用 Dumb 组件，否则它的复用性就会丧失。
