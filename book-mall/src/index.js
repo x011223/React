@@ -5,6 +5,7 @@ import './style/index.css'
 import Mine from './components/mine'
 import Search from './components/search';
 import Home from './components/home';
+import Rank from './containers/rank'
 // import { Provider } from 'react-redux';
 
 
@@ -25,7 +26,9 @@ class Index extends Component {
                         </NavLink>
                         <Route path = '/mine' component = { Mine } />
                         <Route path = '/home' component = { Home } />
-                        <Route path = '/search' component = { Search } /> 
+                        <Route path = '/search' component = { Search } />
+                        <Route path = '/rank/:id' component = { Rank } /> 
+                        {/* <Route path = '/book/:id' component = { book } /> */}
                     </div>    
                 </Router>
             // </div>
