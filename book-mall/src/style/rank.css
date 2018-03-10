@@ -1,0 +1,85 @@
+/* .rank {
+    padding-left: 1rem;
+} */
+
+.rank-male,
+.rank-female {
+    font-size: 1.53rem;
+    color: #4b4848;
+    background-color: #cab389;
+    margin-top: .5rem;
+}
+
+.title {
+    display: block;
+    margin-left: 1rem;
+}
+
+.list-item {
+    margin: .33rem 0 .33rem 1rem;
+}
+
+.rank-name {
+    list-style: none;
+    font-size: 1.23rem;
+    color: #999;
+    height: 2rem;
+    border-bottom: 1px solid #ccc;
+    padding: .5rem 0;
+}
+
+.rank-books-list {
+    margin-top: 2.33rem;
+    margin-left: 1.67rem;
+}
+
+.book-item {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+
+.book-item-img {
+    flex: 1;
+    width: 4.5rem;
+    height: 6rem;
+    display: inline-block;
+}
+
+.item-content {
+    display: inline-block;
+    width: 70%;
+    height: 6rem;
+    margin-left: 1.67rem;
+}
+
+.item-content-desc {
+    font-size: 1rem;
+    color: #cab389;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    word-wrap: normal;
+}
+
+.item-title {
+    /* display: block; */
+    font-size: 1rem;
+    color: #4b4848;
+}
+
+.item-author {
+    /* display: block; */
+    font-size: .67rem;
+    color: #999;
+    float: right;
+    padding-right: 1rem;
+}
+
+.item-people {
+    color: #ccc;
+}
+
+.item-rentent {
+    color: #ccc;
+    padding-left: 1rem;
+}

@@ -24,7 +24,7 @@ class RankList extends Component {
             // console.log(id)
             // this.props.history.push(`/rank/${title}`)
             this.props.history.push({ pathname: `/rank/${id}` , query : { books: res.ranking.books }})
-            console.log(this.props.location.query.books)
+            // console.log(this.props.location.query.books)
         })
     }
 
