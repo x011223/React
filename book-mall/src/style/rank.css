@@ -29,13 +29,15 @@
 }
 
 .rank-books-list {
-    margin-top: 2.33rem;
-    margin-left: 1.67rem;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background-color: #f8f6f6;
 }
 
 .book-item {
     list-style: none;
-    margin-bottom: 1rem;
+    margin: 1rem 1rem 0 1rem;
 }
 
 .book-item-img {
@@ -64,6 +66,7 @@
 .item-title {
     /* display: block; */
     font-size: 1rem;
+    font-weight: 700;
     color: #4b4848;
 }
 
@@ -82,4 +85,17 @@
 .item-rentent {
     color: #ccc;
     padding-left: 1rem;
+}
+
+.rank-back {
+    padding-left: 1rem;
+    height: 3rem;
+    line-height: 3rem;
+    color: rgb(177, 161, 159);
+    background-color: #ee1717;
+    margin: auto;
+}
+
+.back {
+    font-size: 1.5rem;
 }

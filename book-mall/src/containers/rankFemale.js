@@ -21,7 +21,6 @@ class RankMale extends Component {
 
     componentWillMount () {
         this.getRankings().then((res) => {
-            console.log(res)
             this.setState(
                 { ranks: res.female }
             )     

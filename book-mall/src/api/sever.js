@@ -37,13 +37,21 @@ apiRoutes.get('/jumpToRanks', function (req, res) {
         },    
     }).then((response) => {
         res.json(response.data)
-        // console.log(res)
-        // console.log(response)
     }).catch((e) => {
         console.log(e)
     })
 })
 
+apiRoutes.get('/getBookDetail', function (req, res) {
+    let url = `http://api.zhuishushenqi.com/book/${req.query.id}`
+    console.log(url)
+    //通过axios发送http请求,修改headers
+    axios.get(url).then((response) => {
+        res.json(response.data)
+    }).catch((e) => {
+        console.log(e)
+    })
+})
 
 
 app.use('/api', apiRoutes)

@@ -9,7 +9,7 @@ class RankList extends Component {
         rankNames: PropTypes.array
     }
 
-    getRanks (_id) {
+    _getRanks (_id) {
         let url = `/api/jumpToRanks`
         const data = {
             id: _id
@@ -20,18 +20,15 @@ class RankList extends Component {
     }
 
     handleJumpToRanks (id, title) {
-        this.getRanks(id).then((res) => {
-            // console.log(id)
-            // this.props.history.push(`/rank/${title}`)
-            this.props.history.push({ pathname: `/rank/${id}` , query : { books: res.ranking.books }})
-            // console.log(this.props.location.query.books)
+        this._getRanks(id).then((res) => {
+            this.props.history.push({ pathname: `/rank/${id}` ,
+                query : { books: res.ranking.books }})
         })
     }
 
     render() {
         return (
             <div className = "list-item">
-                {/* <h3>{ this.props.rankNames.type }</h3> */}
                 { this.props.rankNames.map((item) => <li key = {item._id}
                                                          onClick = { this.handleJumpToRanks.bind(this, item._id, item.title)} 
                                                          className = "rank-name">{item.title}</li>) }
@@ -39,13 +36,5 @@ class RankList extends Component {
         )
     }
 }
-
-// const mapDisparchToProps = (dispatch) => {
-//     return {
-//         initRankByName: (rankByName) => {
-//             dispatch(initRankByName(rankByName))
-//         }
-//     }
-// }
 
 export default withRouter(RankList)
