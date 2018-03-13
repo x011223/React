@@ -2,24 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios'
 import Book from '../components/book'
-import { connect } from 'redux'
+import { connect } from 'react-redux'
+import { initBooks } from '../reducers/book'
  
-let _books
-let books = new Array()
-
 class RankByName extends Component {
     static propTypes = {
         rankByName: PropTypes.array
-    }
-
-    _dealBooks () {
-        if (!localStorage.getItem('booksCache') 
-            || !localStorage.getItem('booksCache').length 
-            || books !== localStorage.getItem('booksCache')) {
-            _books = this.props.location.query.books 
-            localStorage.setItem('booksCache', JSON.stringify(_books))
-        }
-        books = JSON.parse(localStorage.getItem('booksCache'))
     }
 
     _rankBack () {
@@ -38,14 +26,8 @@ class RankByName extends Component {
 
     handleGetBookDetail (book_id) {
         this._getBookDetail(book_id).then((res) => {
-            // this.props.initBookId(res._id)
-            // this.props.setBook(res)
             console.log(res)
         })
-    }
-
-    componentWillMount () {
-        this._dealBooks()
     }
 
     render () {
@@ -55,13 +37,26 @@ class RankByName extends Component {
                     <span className = "back">返回</span>
                 </div>
                 {
-                    books.map((item) => <Book book = { item } onHandleGetBookDetail = { this.handleGetBookDetail.bind(this, item._id) } key = { item._id } />)
+                    this.props.books.map((item) => <Book book = { item } onHandleGetBookDetail = { this.handleGetBookDetail.bind(this, item._id) } key = { item._id } />)
                 }
             </div>
         )
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        books: state.books
+    }
+}
 
-export default RankByName
-// export default connect(map)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        initBooks: (books) => {
+            dispatch(initBooks(books))
+        }
+    }
+}
+
+// export default RankByName
+export default connect(mapStateToProps, mapDispatchToProps)(RankByName)

@@ -5,7 +5,7 @@ const INIT_RANK_BY_NAME = 'INIT_RANK_BY_NAME'
 // reducer
 export default function (state, action) {
     if (!state) {
-        state = { comments: [] }
+        state = { rankNames: [] }
     }
     switch (action.type) {
         case INIT_RANKNAMES:

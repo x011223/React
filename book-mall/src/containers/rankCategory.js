@@ -2,11 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { initBooks, setBooks } from '../reducers/book'
 import '../style/rank.css'
 
 class RankList extends Component {
     static propTypes = {
-        rankNames: PropTypes.array
+        rankNames: PropTypes.array,
+        books: PropTypes.array
     }
 
     _getRanks (_id) {
@@ -21,8 +24,9 @@ class RankList extends Component {
 
     handleJumpToRanks (id, title) {
         this._getRanks(id).then((res) => {
-            this.props.history.push({ pathname: `/rank/${id}` ,
-                query : { books: res.ranking.books }})
+            console.log(res)
+            this.props.setBooks(res.ranking.books)
+            this.props.history.push(`/rank/${id}`)
         })
     }
 
@@ -37,4 +41,22 @@ class RankList extends Component {
     }
 }
 
-export default withRouter(RankList)
+const mapStateToProps = (state) => {
+    return {
+        // books: state.books
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        initBooks: (books) => {
+            dispatch(initBooks(books))
+        },
+        setBooks: (books) => {
+            dispatch(setBooks(books))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RankList))
+// export default withRouter(RankList)
