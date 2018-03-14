@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { initBooks, setBooks } from '../reducers/book'
+// import { initBooks, setBooks } from '../reducers/book'
+import { setRankId } from '../reducers/rank'
 import '../style/rank.css'
 
 class RankList extends Component {
@@ -12,29 +12,15 @@ class RankList extends Component {
         books: PropTypes.array
     }
 
-    _getRanks (_id) {
-        let url = `/api/jumpToRanks`
-        const data = {
-            id: _id
-        }
-        return axios.get(url, { params: data }).then((res) => {
-            return Promise.resolve(res.data)
-        })
-    }
-
-    handleJumpToRanks (id, title) {
-        this._getRanks(id).then((res) => {
-            console.log(res)
-            this.props.setBooks(res.ranking.books)
-            this.props.history.push(`/rank/${id}`)
-        })
+    handleJumpToRanks (rank_id) {
+        this.props.history.push(`/rank/${rank_id}`)   
     }
 
     render() {
         return (
             <div className = "list-item">
                 { this.props.rankNames.map((item) => <li key = {item._id}
-                                                         onClick = { this.handleJumpToRanks.bind(this, item._id, item.title)} 
+                                                         onClick = { this.handleJumpToRanks.bind(this, item._id)} 
                                                          className = "rank-name">{item.title}</li>) }
             </div>
         )
@@ -44,19 +30,19 @@ class RankList extends Component {
 const mapStateToProps = (state) => {
     return {
         // books: state.books
+        // rank_id: state.rank_id
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        initBooks: (books) => {
-            dispatch(initBooks(books))
-        },
-        setBooks: (books) => {
-            dispatch(setBooks(books))
+        // initRankId: (rank_id) => {
+        //     dispatch(initRankId(rank_id))
+        // },
+        setRankId: (rank_id) => {
+            dispatch(setRankId(rank_id))
         }
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RankList))
-// export default withRouter(RankList)

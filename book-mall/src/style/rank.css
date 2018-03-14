@@ -49,7 +49,7 @@
 
 .item-content {
     display: inline-block;
-    width: 70%;
+    width: 66.7%;
     height: 6rem;
     margin-left: 1.67rem;
 }
@@ -64,14 +64,12 @@
 }
 
 .item-title {
-    /* display: block; */
     font-size: 1rem;
     font-weight: 700;
     color: #4b4848;
 }
 
 .item-author {
-    /* display: block; */
     font-size: .67rem;
     color: #999;
     float: right;

@@ -6,12 +6,13 @@ import Mine from './components/mine'
 import Search from './components/search';
 import Home from './components/home';
 import Rank from './containers/rank'
-// import BookDetail from './containers/bookdetail'
+import BookDetail from './containers/bookdetail'
 import { Provider } from 'react-redux';
 import { createStore } from 'redux'
 import bookStore from './reducers/book'
+import rankStore from './reducers/rank'
 
-const store = createStore(bookStore)
+const store = createStore(bookStore, rankStore, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 class Index extends Component {
     render () {
@@ -30,10 +31,8 @@ class Index extends Component {
                     <Route path = '/mine' component = { Mine } />
                     <Route path = '/home' component = { Home } />
                     <Route path = '/search' component = { Search } />
-                    <Route path = '/rank/:id' component = { Rank } >
-                        {/* <Route path = '/bookdetail' component = { BookDetail } ></Route> */}
-                    </Route> 
-                    {/* <Route path = '/book/:id' component = { book } /> */}
+                    <Route path = '/rank/:id' component = { Rank } />
+                    <Route path = '/bookdetail/:id' component = { BookDetail } ></Route>
                 </div>    
             </Router>
         )
