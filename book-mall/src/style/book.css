@@ -121,3 +121,34 @@
     display: flex;
     flex-direction: column;
 }
+
+.detail-bottom-intro {
+    /* text-align: center; */
+}
+
+.bottom-longIntro {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #a5a4a4;
+    margin: 0;
+    padding: 0 .5rem .5rem;
+    border-bottom: 1px solid #525151;
+    
+}
+
+.bottom-menu {
+    /* display: flex; */
+    padding: 1rem .5rem;
+    border-bottom: 1px solid #525151;
+}
+
+.bottom-menu-title, 
+.bottom-menu-lastchapter {
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgb(117, 117, 117);
+}
+
+.bottom-menu-lastchapter {
+    float: right;
+}

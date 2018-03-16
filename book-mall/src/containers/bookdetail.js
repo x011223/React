@@ -3,6 +3,8 @@ import axios from 'axios'
 // import PropTypes from 'prop-types';
 import '../style/book.css'
 import Rate from '../components/rate'
+import MenuEntery from './menuentery'
+import DetailContent from '../components/detailcontent'
 
 class BookDetail extends Component {
     constructor () {
@@ -14,7 +16,7 @@ class BookDetail extends Component {
     
     format = date => {
         return this.getDateDiff(new Date(date));
-    };
+    }
       
     getDateDiff (dateTimeStamp) {
         let minute = 1000 * 60;
@@ -59,7 +61,6 @@ class BookDetail extends Component {
             this.setState(
                 { book: res }
             )
-            console.log(this.state.book)
         })
     }
 
@@ -76,35 +77,16 @@ class BookDetail extends Component {
                     <span className = "detail-top-home top-three">回到首页</span>
                 </div>
                 <div className ="detail-middle">
-                    <div className ="detail-middle-content">
-                        <div className = "detail-img-wrapper">
-                            <img src = { `http://statics.zhuishushenqi.com${this.state.book.cover}` } alt = "" className = "detail-middle-img" />                            
-                        </div>
-                        <div className = "detail-content-info">
-                            <span className = "content-info-title">{ this.state.book.title }</span>
-                            <span className = "content-info-rate">{ this.state.book.author }&nbsp;|&nbsp;{this.state.book.cat}&nbsp;|&nbsp;{(this.state.book.wordCount / 10000).toFixed(2)}万字</span>
-                            <span className = "content-info-updated">{ this.format(this.state.book.updated) }更新</span>
-                        </div>
-                        <div className = "detail-operator-wrapper">
-                            <div className = "operator-add operator-item">
-                                
-                            </div>
-                            <div className = "operator-read operator-item">
-                                开始阅读
-                            </div>
-                        </div>
-                    </div>
+                    <DetailContent book = { this.state.book } updated = { this.format(this.state.book.updated) } />
                     <div className = "detail-rate-wrapper">
                         <Rate title = {'追人气'} number = {(this.state.book.latelyFollower / 10000).toFixed(1) + '万'} />
                         <Rate title = {'读者留存率'} number = {this.state.book.retentionRatio + '%'} />
                         <Rate title = {'日更字数/天'} number = {this.state.book.serializeWordCount} />                      
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <p>{this.state.book.longIntro}</p>
-                    </div>
-                </div>
+                <MenuEntery longIntro = { this.state.book.longIntro } 
+                            lastChapter = {`[${ this.format(this.state.book.updated) }更新]  ${this.state.book.lastChapter}`}
+                            id = { this.props.match.params.id }/>
             </div>
         )
     }
