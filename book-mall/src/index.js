@@ -7,12 +7,12 @@ import Search from './components/search';
 import Home from './components/home';
 import Rank from './containers/rank'
 import BookDetail from './containers/bookdetail'
-// import { Provider } from 'react-redux';
-// import { createStore } from 'redux'
-// import bookStore from './reducers/book'
-// import rankStore from './reducers/rank'
+import ChapterList from './containers/chapters'
+import { Provider } from 'react-redux';
+import { createStore } from 'redux'
+import bookSourceStore from './reducers/booksources'
 
-// const store = createStore(bookStore, rankStore, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const store = createStore(bookSourceStore, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 class Index extends Component {
     render () {
@@ -33,6 +33,7 @@ class Index extends Component {
                     <Route path = '/search' component = { Search } />
                     <Route path = '/rank/:id' component = { Rank } />
                     <Route path = '/bookdetail/:id' component = { BookDetail } ></Route>
+                    <Route path = '/chapters/:id' component = { ChapterList } ></Route>
                 </div>    
             </Router>
         )
@@ -40,8 +41,8 @@ class Index extends Component {
 }
 
 ReactDOM.render(
-    // <Provider store = { store } >
-        <Index />,
-    // </Provider>,
+    <Provider store = { store } >
+        <Index />
+    </Provider>,
     document.getElementById('root')
 );

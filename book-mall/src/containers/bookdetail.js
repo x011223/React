@@ -5,6 +5,7 @@ import '../style/book.css'
 import Rate from '../components/rate'
 import MenuEntery from './menuentery'
 import DetailContent from '../components/detailcontent'
+import withRouter from 'react-router-dom'
 
 class BookDetail extends Component {
     constructor () {
@@ -64,6 +65,10 @@ class BookDetail extends Component {
         })
     }
 
+    handleMenuClick () {
+        this.props.history.push(`/chapters/${this.props.match.params.id}}`)
+    }
+
     componentDidMount () {
         this.getBookDetail()
     }
@@ -86,7 +91,8 @@ class BookDetail extends Component {
                 </div>
                 <MenuEntery longIntro = { this.state.book.longIntro } 
                             lastChapter = {`[${ this.format(this.state.book.updated) }更新]  ${this.state.book.lastChapter}`}
-                            id = { this.props.match.params.id }/>
+                            id = { this.props.match.params.id }
+                            onHandleClick = { this.handleMenuClick.bind(this) } />
             </div>
         )
     }

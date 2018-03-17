@@ -40,7 +40,6 @@
 .detail-middle {
     margin-top: 1rem;
     padding-bottom: 1rem;
-    /* border-bottom: 1px solid #525151; */
 }
 
 .detail-img-wrapper {
@@ -150,5 +149,11 @@
 }
 
 .bottom-menu-lastchapter {
+    display: inline-block;
+    width: 60%;
     float: right;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    word-wrap: normal;
 }
