@@ -5,7 +5,6 @@ import '../style/book.css'
 import Rate from '../components/rate'
 import MenuEntery from './menuentery'
 import DetailContent from '../components/detailcontent'
-import withRouter from 'react-router-dom'
 
 class BookDetail extends Component {
     constructor () {
@@ -66,7 +65,15 @@ class BookDetail extends Component {
     }
 
     handleMenuClick () {
-        this.props.history.push(`/chapters/${this.props.match.params.id}}`)
+        this.props.history.push(`/chapters/${this.props.match.params.id}`)
+    }
+
+    detailBack () {
+        this.props.history.goBack()
+    }
+
+    detailToHome () {
+        this.props.history.push('/home')
     }
 
     componentDidMount () {
@@ -77,9 +84,9 @@ class BookDetail extends Component {
         return (
             <div className = "book-detail">
                 <div className = "detail-top">
-                    <span className = "detail-top-back top-three">返回</span>
+                    <span className = "detail-top-back top-three" onClick = { this.detailBack.bind(this) }>返回</span>
                     <span className = "detail-top-title top-three">书籍详情</span>
-                    <span className = "detail-top-home top-three">回到首页</span>
+                    <span className = "detail-top-home top-three" onClick = { this.detailToHome.bind(this) }>回到首页</span>
                 </div>
                 <div className ="detail-middle">
                     <DetailContent book = { this.state.book } updated = { this.format(this.state.book.updated) } />

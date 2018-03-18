@@ -11,6 +11,7 @@ import ChapterList from './containers/chapters'
 import { Provider } from 'react-redux';
 import { createStore } from 'redux'
 import bookSourceStore from './reducers/booksources'
+import ReadPage from './containers/read'
 
 const store = createStore(bookSourceStore, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
@@ -32,8 +33,9 @@ class Index extends Component {
                     <Route path = '/home' component = { Home } />
                     <Route path = '/search' component = { Search } />
                     <Route path = '/rank/:id' component = { Rank } />
-                    <Route path = '/bookdetail/:id' component = { BookDetail } ></Route>
-                    <Route path = '/chapters/:id' component = { ChapterList } ></Route>
+                    <Route path = '/bookdetail/:id' component = { BookDetail } />
+                    <Route path = '/chapters/:id' component = { ChapterList } />
+                    <Route path = '/chapter/:id' component = { ReadPage } />
                 </div>    
             </Router>
         )

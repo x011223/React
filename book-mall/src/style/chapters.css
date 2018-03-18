@@ -1,0 +1,48 @@
+.chapters {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* overflow: hidden; */
+}
+
+.chapters-list-operator {
+    display: flex;
+    height: 2rem;
+    line-height: 2rem;
+    padding: .5rem;
+    border-bottom: 1px solid #f8f8f8;
+}
+
+.operator-back,
+.sub-chapters-count {
+    flex: 1;
+}
+
+.chapters-sub {
+    display: flex;
+}
+
+.chapters-list-operator {
+    color: #fff;
+    background-color: #b93321;
+}   
+
+.content-item,
+.sub-chapters-count,
+.sub-chapters-reverse {
+    height: 2.3rem;
+    line-height: 2.3rem;
+    margin-left: 1rem;
+    color: #999;
+    border-bottom: 1px solid #f8f8f8;
+}
+
+.sub-chapters-reverse {
+    padding-right: 1rem;
+}
+
+.chapters-list-content {
+    background-color: #fff;
+}

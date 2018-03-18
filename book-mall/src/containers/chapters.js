@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import Chapters from '../components/chapters'
-import { connect } from 'react-redux'
-import { initBookSources } from '../reducers/booksources'
+import '../style/chapters.css'
 
 class ChapterList extends Component {
     constructor () {
         super()
         this.state = {
             chapters: [],
+            sourceName: '',
             isSourcesOpen: false
         }
     }
@@ -22,9 +22,11 @@ class ChapterList extends Component {
     }
 
     _getChapters () {
+        // console.log(JSON.parse(localStorage.getItem('book_sources')))
         let url = '/api/getBookChapters'
         const data = {
-            id: '5817f1137063737f47bb47fd'
+            id: `${JSON.parse(localStorage.getItem('book_sources'))[0]._id}`
+            // id: `${this.props.book_sources[0]._id}`
         }
         return axios.get(url, { params: data }).then((res) => {
             return Promise.resolve(res.data)
@@ -34,36 +36,27 @@ class ChapterList extends Component {
     getChapters () {
         this._getChapters().then((res) => {
             this.setState({
-                chapters: res.chapters
+                chapters: res.chapters,
+                sourceName: res.name
             })
         })
     }
 
-    changeSource () {
-        console.log("Change Source")
-        this.setState(
-            { isSourcesOpen: !this.state.isSourcesOpen }
-        )
+    handleClickChapter (id, link) {
+        this.props.history.push({pathname: `/chapter/${id}`}, {query: {linkUrl: link}})
     }
 
     render () {
         return (
-            <div>
+            <div className = "chapters">
                 <Chapters chapters = { this.state.chapters } 
-                          handleChangeSource = { this.changeSource.bind(this) }
-                          handleBack = { this._back.bind(this) } />
-                <div className = {this.state.isSourcesOpen ? 'sourcesOpen' : 'sourcesClose'} >
-                    书源列表
-                </div>        
+                          name = { this.state.sourceName }
+                          count = { this.state.chapters.length }
+                          handleBack = { this._back.bind(this) } 
+                          onhandleClickChapter = {this.handleClickChapter.bind(this)}/>
             </div>
         )
     }
 }
-
-const mapStateToProps = (state) => {
-    return {
-        book_sources: state.book_sources
-    }
-}
  
-export default connect(mapStateToProps)(ChapterList)
+export default ChapterList

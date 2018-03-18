@@ -7,17 +7,28 @@ class Chapters extends Component {
         }
     }
 
+    onhandleClickChapter (id) {
+        if (this.props.onhandleClickChapter) {
+            this.props.onhandleClickChapter(id)
+        }
+    }
+
     render () {
         return (
             <div className = "chapters-list">
                 <div className = "chapters-list-operator">
                     <span className = "operator-back" onClick = { this.props.handleBack.bind(this) }>返回</span>
-                    <span className = "operator-change" onClick = { this.props.handleChangeSource.bind(this) }>换源</span>
+                    <span className = "operator-change">{ this.props.name }</span>
+                </div>
+                <div className = "chapters-sub">
+                    <span className = "sub-chapters-count">目录:&nbsp;共{this.props.count}章</span>
+                    <span className = "sub-chapters-reverse">倒序</span>
                 </div>
                 <div className = "chapters-list-content">
                     { this.props.chapters.map((chapter, index) => <li key = {index}
-                                                                      className = "content-item" >
-                        { chapter.title }
+                                                                      className = "content-item"
+                                                                      onClick = {this.props.onhandleClickChapter.bind(this, chapter.id, chapter.link)} >
+                        {index+1}&nbsp;&nbsp;&nbsp;{ chapter.title }
                     </li>) }
                 </div>
             </div>

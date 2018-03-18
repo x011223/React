@@ -1,0 +1,41 @@
+.read-page-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #eee6dd;
+}
+
+.chapter-operator {
+    display: flex;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    padding: 0 1rem;
+    color: #fff;
+    background-color: #b93321;
+}
+
+.chapter-operator-back {
+    flex: 1;
+}
+
+.chapter-content {
+    padding: 0 1rem;
+}
+
+.chapter-content-title {
+    text-align: center;
+    font-weight: 600;
+}
+
+.chapter-content > p:nth-child(2) {
+    text-indent: 2rem;
+}
+
+.chapter-content-para {
+    font-size: inherit!important;
+    line-height: 1.5;
+    margin: .13333rem 0;
+    text-align: justify;
+    color: #888277;
+}

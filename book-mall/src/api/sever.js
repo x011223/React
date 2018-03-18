@@ -97,6 +97,26 @@ apiRoutes.get('/getBookChapters', function (req, res) {
     })
 })
 
+// 获取章节内容
+// 章节列表得到  link
+apiRoutes.get('/getChapterContent', function (req, res) {
+    let url = `http://chapter2.zhuishushenqi.com/chapter/${req.query.link}`
+    console.log(url)
+    //通过axios发送http请求,修改headers
+    axios.get(url, {
+        headers: {
+          //发送http 请求修改referer,host
+          referer: 'http://m.zhuishushenqi.com/?from=www.zhuishushenqi.com',
+          //欺骗手段
+          host: 'chapter2.zhuishushenqi.com'
+        },    
+    }).then((response) => {
+        res.json(response.data)
+    }).catch((e) => {
+        console.log(e)
+    })
+})
+
 app.use('/api', apiRoutes)
 let port = 2999;
 

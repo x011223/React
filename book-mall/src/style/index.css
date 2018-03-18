@@ -5,6 +5,10 @@ html {
     font-family: sans-serif;    
 }
 
+* li {
+    list-style: none;
+}
+
 .router-tab {
     width: 100%;
 }
