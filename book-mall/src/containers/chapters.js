@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import Chapters from '../components/chapters'
 import '../style/chapters.css'
+import { connect } from 'react-redux'
 
 class ChapterList extends Component {
     constructor () {
@@ -35,6 +36,9 @@ class ChapterList extends Component {
 
     getChapters () {
         this._getChapters().then((res) => {
+            for (let i = 0; i < res.chapters.length; i++) {
+                console.log(res.chapters[i].link)                
+            }
             this.setState({
                 chapters: res.chapters,
                 sourceName: res.name

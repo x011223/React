@@ -28,7 +28,6 @@ apiRoutes.get('/getRanks', function (req, res) {
 // 获取排行榜书籍列表
 // 排行榜ID
 apiRoutes.get('/jumpToRanks', function (req, res) {
-    console.log(req.query)
     let url = `http://api.zhuishushenqi.com/ranking/${req.query.id}`
     //通过axios发送http请求,修改headers
     axios.get(url, {
@@ -62,7 +61,6 @@ apiRoutes.get('/getBookDetail', function (req, res) {
 // 书籍ID
 apiRoutes.get('/getBookSource', function (req, res) {
     let url = `http://api.zhuishushenqi.com/atoc?view=summary&book=${req.query.id}`
-    console.log(url)
     //通过axios发送http请求,修改headers
     axios.get(url, {
         headers: {
@@ -101,7 +99,6 @@ apiRoutes.get('/getBookChapters', function (req, res) {
 // 章节列表得到  link
 apiRoutes.get('/getChapterContent', function (req, res) {
     let url = `http://chapter2.zhuishushenqi.com/chapter/${req.query.link}`
-    console.log(url)
     //通过axios发送http请求,修改headers
     axios.get(url, {
         headers: {
@@ -118,7 +115,8 @@ apiRoutes.get('/getChapterContent', function (req, res) {
 })
 
 app.use('/api', apiRoutes)
-let port = 2999;
+// app.use(express.static("./build"))
+let port = 4396;
 
 module.exports = app.listen(port, (err) => {
     if(err) {

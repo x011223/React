@@ -9,12 +9,10 @@ import Rank from './containers/rank'
 import BookDetail from './containers/bookdetail'
 import ChapterList from './containers/chapters'
 import { Provider } from 'react-redux';
-import { createStore } from 'redux'
-import bookSourceStore from './reducers/booksources'
 import ReadPage from './containers/read'
 
-const store = createStore(bookSourceStore, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-
+// const store = createState
+// const store = createStore(bookSourceStore, chaptersLinksStore, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 class Index extends Component {
     render () {
         return (
@@ -43,8 +41,8 @@ class Index extends Component {
 }
 
 ReactDOM.render(
-    <Provider store = { store } >
-        <Index />
-    </Provider>,
+    // <Provider store = { store } >
+        <Index />,
+    // </Provider>,
     document.getElementById('root')
 );

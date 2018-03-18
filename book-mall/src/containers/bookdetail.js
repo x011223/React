@@ -81,6 +81,7 @@ class BookDetail extends Component {
     }
 
     render () {
+        const { book } = this.state
         return (
             <div className = "book-detail">
                 <div className = "detail-top">
@@ -89,15 +90,15 @@ class BookDetail extends Component {
                     <span className = "detail-top-home top-three" onClick = { this.detailToHome.bind(this) }>回到首页</span>
                 </div>
                 <div className ="detail-middle">
-                    <DetailContent book = { this.state.book } updated = { this.format(this.state.book.updated) } />
+                    <DetailContent book = { book } updated = { this.format(book.updated) } />
                     <div className = "detail-rate-wrapper">
-                        <Rate title = {'追人气'} number = {(this.state.book.latelyFollower / 10000).toFixed(1) + '万'} />
-                        <Rate title = {'读者留存率'} number = {this.state.book.retentionRatio + '%'} />
-                        <Rate title = {'日更字数/天'} number = {this.state.book.serializeWordCount} />                      
+                        <Rate title = {'追人气'} number = {(book.latelyFollower / 10000).toFixed(1) + '万'} />
+                        <Rate title = {'读者留存率'} number = {book.retentionRatio + '%'} />
+                        <Rate title = {'日更字数/天'} number = {book.serializeWordCount} />                      
                     </div>
                 </div>
-                <MenuEntery longIntro = { this.state.book.longIntro } 
-                            lastChapter = {`[${ this.format(this.state.book.updated) }更新]  ${this.state.book.lastChapter}`}
+                <MenuEntery longIntro = { book.longIntro } 
+                            lastChapter = {`[${ this.format(book.updated) }更新]  ${book.lastChapter}`}
                             id = { this.props.match.params.id }
                             onHandleClick = { this.handleMenuClick.bind(this) } />
             </div>

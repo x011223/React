@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { setBookSources } from '../reducers/booksources'
 import { connect } from 'react-redux'
 
 class MenuEntery extends Component {
@@ -11,7 +10,7 @@ class MenuEntery extends Component {
     }
 
     componentDidMount () {
-        this.setBookSources()
+        this.setBookSources()        
     }
 
     _setBookSources () {
@@ -26,37 +25,37 @@ class MenuEntery extends Component {
 
     setBookSources () {
         this._setBookSources().then((res) => {
-            this.props.setBookSources(res)
+            // this.props.setBookSources(res)
             localStorage.setItem('book_sources', JSON.stringify(res))
-            // console.log(JSON.parse(localStorage.getItem('book_sources'))[0])
-            // console.log(res)
         })
     }
 
 
     render () {
+        const { longIntro, onHandleClick, lastChapter } = this.props
         return (
             <div className = "detail-bottom-intro">
-                <p className = "bottom-longIntro">{this.props.longIntro}</p>
-                <div className = "bottom-menu" onClick = { this.props.onHandleClick.bind(this) }>
+                <p className = "bottom-longIntro">{longIntro}</p>
+                <div className = "bottom-menu" onClick = { onHandleClick.bind(this) }>
                     <span className = "bottom-menu-title">目录</span>
-                    <span className = "bottom-menu-lastchapter">{this.props.lastChapter}</span>
+                    <span className = "bottom-menu-lastchapter">{lastChapter}</span>
                 </div>
             </div>
         )
     }
 }
 
-const mapStateToProps = (state) => {
-    return {}
-}
+// const mapStateToProps = (state) => {
+//     return {}
+// }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setBookSources: (booksources) => {
-            dispatch(setBookSources(booksources))
-        }
-    }
-}
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         setBookSources: (booksources) => {
+//             dispatch(setBookSources(booksources))
+//         }
+//     }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuEntery)
+// export default connect(mapStateToProps, mapDispatchToProps)(MenuEntery)
+export default MenuEntery
