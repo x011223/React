@@ -3,6 +3,8 @@ import axios from 'axios'
 import Chapters from '../components/chapters'
 import '../style/chapters.css'
 import { connect } from 'react-redux'
+import { initLinks } from '../actions/index'
+let links = new Array()
 
 class ChapterList extends Component {
     constructor () {
@@ -23,7 +25,6 @@ class ChapterList extends Component {
     }
 
     _getChapters () {
-        // console.log(JSON.parse(localStorage.getItem('book_sources')))
         let url = '/api/getBookChapters'
         const data = {
             id: `${JSON.parse(localStorage.getItem('book_sources'))[0]._id}`
@@ -37,8 +38,9 @@ class ChapterList extends Component {
     getChapters () {
         this._getChapters().then((res) => {
             for (let i = 0; i < res.chapters.length; i++) {
-                console.log(res.chapters[i].link)                
+                links.push(res.chapters[i].link)              
             }
+            this.props.initLinks(links)
             this.setState({
                 chapters: res.chapters,
                 sourceName: res.name
@@ -46,8 +48,8 @@ class ChapterList extends Component {
         })
     }
 
-    handleClickChapter (id, link) {
-        this.props.history.push({pathname: `/chapter/${id}`}, {query: {linkUrl: link}})
+    handleClickChapter (index, link) {
+        this.props.history.push({pathname: `/chapter/${index}`}, {query: {linkUrl: link}})
     }
 
     render () {
@@ -62,5 +64,20 @@ class ChapterList extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        linksReducer: state.linksReducer
+    }
+}
+
+const mapDispatchToProps  = (dispatch) => {
+    return {
+        initLinks: (links) => {
+            dispatch(initLinks(links))
+        }
+    }
+}
  
-export default ChapterList
+// export default ChapterList
+export default connect(mapStateToProps, mapDispatchToProps)(ChapterList)

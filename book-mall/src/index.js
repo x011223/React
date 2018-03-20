@@ -1,18 +1,20 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom"
 import './style/index.css'
 import Mine from './components/mine'
-import Search from './components/search';
-import Home from './components/home';
+import Search from './components/search'
+import Home from './components/home'
 import Rank from './containers/rank'
 import BookDetail from './containers/bookdetail'
 import ChapterList from './containers/chapters'
-import { Provider } from 'react-redux';
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import ReadPage from './containers/read'
+import chapterLinks from './reducers/index'
 
-// const store = createState
-// const store = createStore(bookSourceStore, chaptersLinksStore, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const store = createStore(chapterLinks, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+console.log(store.getState())
 class Index extends Component {
     render () {
         return (
@@ -33,7 +35,7 @@ class Index extends Component {
                     <Route path = '/rank/:id' component = { Rank } />
                     <Route path = '/bookdetail/:id' component = { BookDetail } />
                     <Route path = '/chapters/:id' component = { ChapterList } />
-                    <Route path = '/chapter/:id' component = { ReadPage } />
+                    <Route path = '/chapter/:index' component = { ReadPage } />
                 </div>    
             </Router>
         )
@@ -41,8 +43,8 @@ class Index extends Component {
 }
 
 ReactDOM.render(
-    // <Provider store = { store } >
-        <Index />,
-    // </Provider>,
+    <Provider store = { store } >
+        <Index />
+    </Provider>,
     document.getElementById('root')
 );

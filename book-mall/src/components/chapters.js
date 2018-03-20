@@ -28,7 +28,7 @@ class Chapters extends Component {
                 <div className = "chapters-list-content">
                     { chapters.map((chapter, index) => <li key = {index}
                                                                       className = "content-item"
-                                                                      onClick = {onhandleClickChapter.bind(this, chapter.id, chapter.link)} >
+                                                                      onClick = {onhandleClickChapter.bind(this, index, chapter.link)} >
                         {index + 1}&nbsp;&nbsp;&nbsp;{ chapter.title }
                     </li>) }
                 </div>

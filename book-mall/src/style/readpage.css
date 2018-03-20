@@ -7,7 +7,6 @@
     left: 0;
     right: 0; 
     background-color: var(--backgroundColor);
-    /* color: rgb(135, 252, 164); */
 }
 
 .chapter-operator {
@@ -147,4 +146,9 @@
     font-size: 1rem;
     margin: 1.33rem 0 0 1rem;
     padding: .33rem 0;
+}
+
+.hidden-div {
+    height: 100px;
+    width: 100%;
 }
