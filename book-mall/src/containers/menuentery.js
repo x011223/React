@@ -45,17 +45,4 @@ class MenuEntery extends Component {
     }
 }
 
-// const mapStateToProps = (state) => {
-//     return {}
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         setBookSources: (booksources) => {
-//             dispatch(setBookSources(booksources))
-//         }
-//     }
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(MenuEntery)
 export default MenuEntery

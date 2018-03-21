@@ -4,7 +4,6 @@ import Chapters from '../components/chapters'
 import '../style/chapters.css'
 import { connect } from 'react-redux'
 import { initLinks } from '../actions/index'
-let links = new Array()
 
 class ChapterList extends Component {
     constructor () {
@@ -37,8 +36,18 @@ class ChapterList extends Component {
 
     getChapters () {
         this._getChapters().then((res) => {
+            let chaptersInfo = []
+            let info = {
+                link: '',
+                order: ''
+            }
+            let links = new Array()
             for (let i = 0; i < res.chapters.length; i++) {
-                links.push(res.chapters[i].link)              
+                info = {
+                    link: res.chapters[i].link,
+                    order: res.chapters[i].order
+                }
+                links.push(info)              
             }
             this.props.initLinks(links)
             this.setState({
@@ -52,6 +61,13 @@ class ChapterList extends Component {
         this.props.history.push({pathname: `/chapter/${index}`}, {query: {linkUrl: link}})
     }
 
+    handleReverse () {
+        let chaptersReverse = this.state.chapters
+        this.setState(
+            {chapters: chaptersReverse.reverse()}
+        )
+    }
+
     render () {
         return (
             <div className = "chapters">
@@ -59,7 +75,8 @@ class ChapterList extends Component {
                           name = { this.state.sourceName }
                           count = { this.state.chapters.length }
                           handleBack = { this._back.bind(this) } 
-                          onhandleClickChapter = {this.handleClickChapter.bind(this)}/>
+                          onhandleClickChapter = { this.handleClickChapter.bind(this) }
+                          onhandleReverse = { this.handleReverse.bind(this) }/>
             </div>
         )
     }

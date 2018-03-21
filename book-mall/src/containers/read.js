@@ -3,8 +3,6 @@ import Read from '../components/read'
 import '../style/readpage.css'
 import axios from 'axios'
 import { connect } from 'react-redux'
-let count = 0
-let newChapterIndex
 
 class ReadPage extends Component {
     constructor () {
@@ -15,16 +13,20 @@ class ReadPage extends Component {
             color: '',
             fontSize: 16,
             chapters: [{
+                order: '',
                 title: '',
-                content: []
+                content: [],
             }],
+            order: '',
         }
     }
 
     componentDidMount () {
+        this.setState(
+            {order: +this.props.match.params.index + 1}
+        )
         this.getChapterContent(this.props.location.state.query.linkUrl)
         this.handleScroll()
-        count = 0
     }
 
     componentWillUnmount () {
@@ -61,31 +63,47 @@ class ReadPage extends Component {
         })
     }
 
-    getChapterContent (linkUrl) {
+    getChapterContent (linkUrl, operator) {
         this._getChapterContent(linkUrl).then((res) => {
             // let reg = /^\s{2,}/gm
-            console.log(res)
-            let reg = /\n/gm
-            // let reg_1 = /\s*[\u7b2c?!\u7ae0*\n]/gm
-            // console.log(res.chapter.cpContent.replace(reg_1, '匹配到了'))
-            let c = res.chapter.cpContent.split(reg)
+            let regFormatLine = /\n/gm
+            let regExtraTitle = /(\u7b2c.*\u7ae0.*\n)/gm
+            let removeExtraTitle = res.chapter.cpContent.replace(regExtraTitle, '')
+            let formatLine = removeExtraTitle.split(regFormatLine)
+            let isInChapters = false
             if (res.chapter.isVip) {
-                c = '这是付费章节'
-                c = c.split()
+                formatLine = ['这是付费章节']
             }
             let objChapter = {
+                    order: this.state.order,
                     title: res.chapter.title,
-                    content: c
+                    content: formatLine
                 }
-            if (!this.state.chapters[0].title) {
+            this.state.chapters.map((item) => {
+                if (item.order === objChapter.order) {
+                    isInChapters = true
+                } 
+            })              
+            const { chapters } = this.state
+            if (!chapters[0].title) {
                 this.setState(
-                    { chapters: [objChapter]}
+                    { chapters: [objChapter] }
                 )
             } else {
-                this.setState(
-                    {hapters: [...this.state.chapters, objChapter]}
-                )
-            }
+                let chaptersCache = chapters
+                if ((objChapter.order > chapters[chapters.length - 1].order) && !isInChapters) {        
+                    this.setState(
+                        {chapters: [...chaptersCache, objChapter]}
+                    )
+                } else if ((objChapter.order < chapters[0].order) && !isInChapters) {
+                    chaptersCache.unshift(objChapter)
+                    this.setState(
+                        {chapters: chaptersCache}
+                    )
+                } else {
+                    console.log('此文章已缓存')
+                }
+            }         
         })
     }
 
@@ -130,40 +148,39 @@ class ReadPage extends Component {
     }
 
     handleNewChapter (operator) {
-        let index = +this.props.match.params.index
-        const { linksReducer } = this.props
         switch (operator) {
             case 'nextChapter':
-                if (newChapterIndex === linksReducer.linksReducer.length) {
-                    console.log("没有下一章了")
-                    return
-                } 
-                if ((count === 0) && (index !== linksReducer.linksReducer.length)) {
-                    newChapterIndex = index + 1                       
-                }
-                this.getChapterContent(linksReducer.linksReducer[newChapterIndex])
-                ++count
-                ++newChapterIndex
-                break
+                this._getNextChapter()
+            break
             case 'prevChapter':
-                if (newChapterIndex === 0) {
-                    console.log("没有上一章了")
-                    return
-                }
-                if ((count === 0) && (index !== 0)) {
-                    newChapterIndex = index - 1
-                }
-                this.getChapterContent(linksReducer.linksReducer[newChapterIndex])
-                --newChapterIndex
-                --count
-                break
+                this._getPrevChapter()
+            break
             default:
                 return
         }
     }
 
+    _getNextChapter () {
+        const { linksReducer } = this.props
+        this.setState(
+            {order: this.state.order + 1}
+        ) 
+        const { order } = this.state
+        this.getChapterContent(linksReducer.linksReducer[order].link, 'nextChapter')
+    }
+
+    _getPrevChapter () {
+        const { linksReducer } = this.props
+        this.setState(
+            {order: this.state.order - 1}
+        ) 
+        const { order } = this.state
+        // if (!isInChapters) 
+        this.getChapterContent(linksReducer.linksReducer[order].link, 'prevChapter')
+    }
+
     render () {
-        const { isOperatorShow, fontSize, chapters } = this.state
+        const { isOperatorShow, fontSize, chapters, order } = this.state
         return (
             <div className = "read-page-wrapper" ref = {(div) => {this.readPageDiv = div}} style = {{fontSize: fontSize + 'px'}}>
                 <div className = { isOperatorShow ? 'chapter-operator-top show-pannel' : 'chapter-operator-top' }>
@@ -175,6 +192,7 @@ class ReadPage extends Component {
                         content = {chapter.content} 
                         onHandleShowOperator = {this.handleShowOperator.bind(this)}
                         key = { index }
+                        order = {order}
                     />
                 )}
                 <div ref = {(div) => {this.hiddenDiv = div}} className = "hidden-div"></div>
@@ -198,9 +216,9 @@ class ReadPage extends Component {
                               >护眼</span>
                     </div>
                     <div className = "operator-line3">
-                        <span className = "operator-line3-prev" onClick = {this.handleNewChapter.bind(this, 'prevChapter')}>上一章</span>
+                        <span className = "operator-line3-prev" href = { '#' + 'chapter' + order } onClick = {this.handleNewChapter.bind(this, 'prevChapter')}>上一章</span>
                         <span className = "operator-line3-menu">目录</span>
-                        <span className = "operator-line3-next" onClick = {this.handleNewChapter.bind(this, 'nextChapter')}>下一章</span>
+                        <span className = "operator-line3-next" href = { '#' + 'chapter' + order } onClick = {this.handleNewChapter.bind(this, 'nextChapter')}>下一章</span>
                     </div>
                 </div>
             </div>   

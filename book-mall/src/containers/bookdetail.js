@@ -64,6 +64,16 @@ class BookDetail extends Component {
         })
     }
 
+    handleShelf () {
+        let { book } = this.state
+        let bookCache = book
+        let shelfBooks = localStorage.getItem('shelfBooks') ? JSON.parse(localStorage.getItem('shelfBooks')) : []
+        shelfBooks = [...shelfBooks, bookCache]
+        localStorage.setItem('shelfBooks', JSON.stringify(shelfBooks))
+        console.log(shelfBooks)
+        console.log(JSON.parse(localStorage.getItem('shelfBooks')))
+    }
+
     handleMenuClick () {
         this.props.history.push(`/chapters/${this.props.match.params.id}`)
     }
@@ -90,7 +100,10 @@ class BookDetail extends Component {
                     <span className = "detail-top-home top-three" onClick = { this.detailToHome.bind(this) }>回到首页</span>
                 </div>
                 <div className ="detail-middle">
-                    <DetailContent book = { book } updated = { this.format(book.updated) } />
+                    <DetailContent book = { book } 
+                                   updated = { this.format(book.updated) } 
+                                   textOfShelf = { '加入书架' }
+                                   onHandleAddToShelf = { this.handleShelf.bind(this) } />
                     <div className = "detail-rate-wrapper">
                         <Rate title = {'追人气'} number = {(book.latelyFollower / 10000).toFixed(1) + '万'} />
                         <Rate title = {'读者留存率'} number = {book.retentionRatio + '%'} />

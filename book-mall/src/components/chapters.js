@@ -13,8 +13,14 @@ class Chapters extends Component {
         }
     }
 
+    onhandleReverse () {
+        if (this.props.onhandleReverse) {
+            this.props.onhandleReverse()
+        }
+    }
+
     render () {
-        const { chapters, name, count, handleBack, onhandleClickChapter } = this.props
+        const { chapters, name, count, handleBack, onhandleClickChapter, onhandleReverse } = this.props
         return (
             <div className = "chapters-list">
                 <div className = "chapters-list-operator">
@@ -23,7 +29,7 @@ class Chapters extends Component {
                 </div>
                 <div className = "chapters-sub">
                     <span className = "sub-chapters-count">目录:&nbsp;共{count}章</span>
-                    <span className = "sub-chapters-reverse">倒序</span>
+                    <span className = "sub-chapters-reverse" onClick = { onhandleReverse.bind(this) }>倒序</span>
                 </div>
                 <div className = "chapters-list-content">
                     { chapters.map((chapter, index) => <li key = {index}
