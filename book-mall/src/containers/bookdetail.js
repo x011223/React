@@ -10,7 +10,10 @@ class BookDetail extends Component {
     constructor () {
         super()
         this.state = {
-            book: []
+            book: [],
+            textOfShelf: '',
+            isInShelf: false,
+            shelves: []
         }
     }
     
@@ -65,13 +68,16 @@ class BookDetail extends Component {
     }
 
     handleShelf () {
-        let { book } = this.state
+        let { book, isInShelf, textOfShelf } = this.state
         let bookCache = book
-        let shelfBooks = localStorage.getItem('shelfBooks') ? JSON.parse(localStorage.getItem('shelfBooks')) : []
-        shelfBooks = [...shelfBooks, bookCache]
-        localStorage.setItem('shelfBooks', JSON.stringify(shelfBooks))
-        console.log(shelfBooks)
-        console.log(JSON.parse(localStorage.getItem('shelfBooks')))
+        let shelfBooks = localStorage.getItem('shelfBooks') ? JSON.parse(localStorage.getItem('shelfBooks')) : []        
+        if (textOfShelf === '加入书架') {
+            shelfBooks = [...shelfBooks, bookCache]
+            localStorage.setItem('shelfBooks', JSON.stringify(shelfBooks))
+            this.setState(
+                {textOfShelf: '已加入书架'}
+            )
+        }  
     }
 
     handleMenuClick () {
@@ -91,7 +97,7 @@ class BookDetail extends Component {
     }
 
     render () {
-        const { book } = this.state
+        const { book, isInShelf, textOfShelf } = this.state
         return (
             <div className = "book-detail">
                 <div className = "detail-top">
@@ -102,8 +108,8 @@ class BookDetail extends Component {
                 <div className ="detail-middle">
                     <DetailContent book = { book } 
                                    updated = { this.format(book.updated) } 
-                                   textOfShelf = { '加入书架' }
-                                   onHandleAddToShelf = { this.handleShelf.bind(this) } />
+                                   textOfShelf = { textOfShelf }
+                                   onHandleShelf = { this.handleShelf.bind(this) } />
                     <div className = "detail-rate-wrapper">
                         <Rate title = {'追人气'} number = {(book.latelyFollower / 10000).toFixed(1) + '万'} />
                         <Rate title = {'读者留存率'} number = {book.retentionRatio + '%'} />

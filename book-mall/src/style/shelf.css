@@ -1,0 +1,23 @@
+.shelf-book {
+    margin-top: 1rem;
+    text-align: center;
+    
+}
+
+.shelf-book-item {
+    display: inline-block;
+    width: 25%;
+    list-style: none;
+    padding: .5rem .5rem;
+    border: 1px solid #5f5b5b;
+    margin: 0 .3rem;
+}
+
+.shelf-item-img {
+    height: 8rem;
+    width: 6rem;
+}
+
+.shelf-item-author {
+    display: block;
+}

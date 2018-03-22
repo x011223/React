@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
 class DetailContent extends Component {
-    onHandleAddToShelf (props) {
-        if (this.props.onHandleAddToShelf) {
-            this.props.onHandleAddToShelf()
+    onHandleShelf (props) {
+        if (this.props.onHandleShelf) {
+            this.props.onHandleShelf()
         }
     }
     render () {
-        const { book, updated, textOfShelf, onHandleAddToShelf } = this.props
+        const { book, updated, textOfShelf, onHandleShelf } = this.props
         return (
             <div className ="detail-middle-content">
                 <div className = "detail-img-wrapper">
@@ -19,7 +19,7 @@ class DetailContent extends Component {
                     <span className = "content-info-updated">{ updated }更新</span>
                 </div>
                 <div className = "detail-operator-wrapper">
-                    <div className = "operator-add operator-item" onClick = { onHandleAddToShelf.bind(this) } >
+                    <div className = "operator-add operator-item" onClick = { onHandleShelf.bind(this) } >
                         {textOfShelf}
                     </div>
                     <div className = "operator-read operator-item">
