@@ -20,4 +20,27 @@
 
 .shelf-item-author {
     display: block;
+    width: 60%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    word-wrap: normal;
+}
+
+.shelf-operator {
+    text-align: right;
+    margin-top: 1rem;
+}
+
+.shelf-operator > span {
+    padding-right: 1rem;
+}
+
+.shelf-item-bottom {
+    display: flex;
+}
+
+.shelf-item-delete {
+    text-align: right;
+    flex: 1;
 }

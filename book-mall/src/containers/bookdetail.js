@@ -64,20 +64,45 @@ class BookDetail extends Component {
             this.setState(
                 { book: res }
             )
+            this.isInShelf()
         })
     }
 
     handleShelf () {
-        let { book, isInShelf, textOfShelf } = this.state
+        let { book, textOfShelf } = this.state
         let bookCache = book
         let shelfBooks = localStorage.getItem('shelfBooks') ? JSON.parse(localStorage.getItem('shelfBooks')) : []        
         if (textOfShelf === '加入书架') {
             shelfBooks = [...shelfBooks, bookCache]
             localStorage.setItem('shelfBooks', JSON.stringify(shelfBooks))
             this.setState(
-                {textOfShelf: '已加入书架'}
+                {textOfShelf: '正在追书'}
             )
         }  
+    }
+
+    isInShelf () {
+        const { book, textOfShelf } = this.state
+        let bookInShelf = localStorage.getItem('shelfBooks') ? JSON.parse(localStorage.getItem('shelfBooks')) : []
+        if (!bookInShelf.length) {
+            this.setState(
+                {textOfShelf: '加入书架'}
+            )
+        } else {
+            for (let i = 0; i < bookInShelf.length; i++) {
+                if (bookInShelf[i]._id === book._id) {
+                    this.setState(
+                        {textOfShelf: '正在追书'}
+                    )
+                    // break;
+                } else {
+                    this.setState(
+                        {textOfShelf: '加入书架'}
+                    )
+                }
+            }
+        }
+        return textOfShelf                    
     }
 
     handleMenuClick () {
@@ -97,7 +122,7 @@ class BookDetail extends Component {
     }
 
     render () {
-        const { book, isInShelf, textOfShelf } = this.state
+        const { book, textOfShelf } = this.state
         return (
             <div className = "book-detail">
                 <div className = "detail-top">

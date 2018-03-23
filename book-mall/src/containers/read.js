@@ -187,7 +187,7 @@ class ReadPage extends Component {
                     <span className = "chapter-operator-back" onClick = {this.handleClickBack.bind(this)}>返回</span>
                     <span className = "chapter-operator-change">换源</span>
                 </div>
-                { this.state.chapters.map((chapter, index) => 
+                { chapters.map((chapter, index) => 
                     <Read title = {chapter.title} 
                         content = {chapter.content} 
                         onHandleShowOperator = {this.handleShowOperator.bind(this)}
@@ -216,9 +216,9 @@ class ReadPage extends Component {
                               >护眼</span>
                     </div>
                     <div className = "operator-line3">
-                        <span className = "operator-line3-prev" href = { '#' + 'chapter' + order } onClick = {this.handleNewChapter.bind(this, 'prevChapter')}>上一章</span>
+                        <span className = "operator-line3-prev"onClick = {this.handleNewChapter.bind(this, 'prevChapter')}>上一章</span>
                         <span className = "operator-line3-menu">目录</span>
-                        <span className = "operator-line3-next" href = { '#' + 'chapter' + order } onClick = {this.handleNewChapter.bind(this, 'nextChapter')}>下一章</span>
+                        <span className = "operator-line3-next" onClick = {this.handleNewChapter.bind(this, 'nextChapter')}>下一章</span>
                     </div>
                 </div>
             </div>   

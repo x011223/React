@@ -5,7 +5,7 @@ import ShelfBooks from '../containers/shelf'
 class Mine extends Component {
     render () {
         return (
-            <div>
+            <div className = "mine">
                 <ShelfBooks />
             </div>
         )

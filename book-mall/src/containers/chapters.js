@@ -36,12 +36,11 @@ class ChapterList extends Component {
 
     getChapters () {
         this._getChapters().then((res) => {
-            let chaptersInfo = []
             let info = {
                 link: '',
                 order: ''
             }
-            let links = new Array()
+            let links = []
             for (let i = 0; i < res.chapters.length; i++) {
                 info = {
                     link: res.chapters[i].link,
