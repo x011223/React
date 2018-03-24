@@ -18,6 +18,7 @@ class ReadPage extends Component {
                 content: [],
             }],
             order: '',
+            isSideShow: false
         }
     }
 
@@ -112,9 +113,22 @@ class ReadPage extends Component {
     }
 
     handleShowOperator () {
-        this.setState(
-            { isOperatorShow: !this.state.isOperatorShow }
-        )
+        const {isOperatorShow, isSideShow} = this.state
+        if (isSideShow) {
+            this.setState(
+                { 
+                    isOperatorShow: false,
+                    isSideShow: false
+                }
+            )
+        } else {
+            this.setState(
+                { 
+                    isOperatorShow: !this.state.isOperatorShow,
+                }
+            )
+        }
+        
     }
 
     changeColor (model) {
@@ -175,12 +189,21 @@ class ReadPage extends Component {
             {order: this.state.order - 1}
         ) 
         const { order } = this.state
-        // if (!isInChapters) 
         this.getChapterContent(linksReducer.linksReducer[order].link, 'prevChapter')
     }
 
+    handleChapterLists () {
+        this.setState(
+            {
+                isSideShow: true,
+                isOperatorShow: false,
+            }
+        )
+        console.log(this.props.linksReducer)
+    }
+
     render () {
-        const { isOperatorShow, fontSize, chapters, order } = this.state
+        const { isOperatorShow, fontSize, chapters, order, isSideShow } = this.state
         return (
             <div className = "read-page-wrapper" ref = {(div) => {this.readPageDiv = div}} style = {{fontSize: fontSize + 'px'}}>
                 <div className = { isOperatorShow ? 'chapter-operator-top show-pannel' : 'chapter-operator-top' }>
@@ -217,9 +240,20 @@ class ReadPage extends Component {
                     </div>
                     <div className = "operator-line3">
                         <span className = "operator-line3-prev"onClick = {this.handleNewChapter.bind(this, 'prevChapter')}>上一章</span>
-                        <span className = "operator-line3-menu">目录</span>
+                        <span className = "operator-line3-menu" onClick = {this.handleChapterLists.bind(this)}>目录</span>
                         <span className = "operator-line3-next" onClick = {this.handleNewChapter.bind(this, 'nextChapter')}>下一章</span>
                     </div>
+                </div>
+                <div className = "side-chapters-list">
+                    <span className = "side-list-back">{isSideShow ? '返回' : ''}</span>
+                    <div className = "side-list-content">
+                        {isSideShow ? this.props.linksReducer.linksReducer.map((chapter, order) => <li key = {order}
+                                        className = "side-list-item">
+                                        <span>{chapter.title}</span>
+                                    </li>)
+                                    : ''}
+                    </div>
+                    
                 </div>
             </div>   
         )

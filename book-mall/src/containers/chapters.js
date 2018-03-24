@@ -36,18 +36,11 @@ class ChapterList extends Component {
 
     getChapters () {
         this._getChapters().then((res) => {
-            let info = {
-                link: '',
-                order: ''
-            }
             let links = []
-            for (let i = 0; i < res.chapters.length; i++) {
-                info = {
-                    link: res.chapters[i].link,
-                    order: res.chapters[i].order
-                }
-                links.push(info)              
-            }
+            // for (let i = 0; i < res.chapters.length; i++) {
+            //     links.push(res.chapters[i])              
+            // }
+            links = res.chapters
             this.props.initLinks(links)
             this.setState({
                 chapters: res.chapters,

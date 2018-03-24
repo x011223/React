@@ -40,12 +40,10 @@ class ShelfBooks extends Component {
     }
     
     handleDeleteShelfBook (index) {
-        console.log(index)
         let books = JSON.parse(localStorage.getItem('shelfBooks'))
         books = [...books.slice(0, index),
             ...books.slice(index + 1)]
         localStorage.setItem('shelfBooks', JSON.stringify(books))
-        console.log(books)
         this.setState(
             {shelfBooks: books}
         )
@@ -61,12 +59,15 @@ class ShelfBooks extends Component {
                             isDeleteShow && shelfBooks.length ? '完成' : '编辑'}
                     </span>
                 </div>
-                { shelfBooks.map((shelfBook, index) =>
-                    <ShelfBook key = { index } 
+                <div>
+                    { shelfBooks.map((shelfBook, index) =>
+                        <ShelfBook key = { index } 
                                shelfBook = { shelfBook } 
                                shelfIndex = { index } 
                                isDeleteShow = { isDeleteShow }
                                onhandleDeleteShelfBook = {this.handleDeleteShelfBook.bind(this, index)}/>) }
+                </div>
+                
             </div>
         )
     }

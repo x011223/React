@@ -7,7 +7,7 @@ class DetailContent extends Component {
         }
     }
     render () {
-        const { book, updated, textOfShelf, onHandleShelf } = this.props
+        const { book, updated, textOfShelf, onHandleShelf, onHandleStartRead } = this.props
         return (
             <div className ="detail-middle-content">
                 <div className = "detail-img-wrapper">
@@ -22,7 +22,7 @@ class DetailContent extends Component {
                     <div className = "operator-add operator-item" onClick = { onHandleShelf.bind(this) } >
                         {textOfShelf}
                     </div>
-                    <div className = "operator-read operator-item">
+                    <div className = "operator-read operator-item" onClick = { onHandleStartRead.bind(this) }>
                         开始阅读
                     </div>
                 </div>

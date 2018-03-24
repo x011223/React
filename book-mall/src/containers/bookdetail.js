@@ -5,6 +5,8 @@ import '../style/book.css'
 import Rate from '../components/rate'
 import MenuEntery from './menuentery'
 import DetailContent from '../components/detailcontent'
+import { connect } from 'react-redux'
+import { initLinks } from '../actions/index'
 
 class BookDetail extends Component {
     constructor () {
@@ -117,6 +119,26 @@ class BookDetail extends Component {
         this.props.history.push('/home')
     }
 
+    startRead () {
+        console.log(this.state.book)
+        this._getChapters().then((res) => {
+            console.log(res)
+            this.props.history.push({pathname: `/chapter/0`}, {query: {linkUrl: res.chapters[0].link}})
+            this.props.initLinks(res.chapters)
+        })
+    } 
+
+    _getChapters () {
+        let url = '/api/getBookChapters'
+        const data = {
+            id: `${JSON.parse(localStorage.getItem('book_sources'))[0]._id}`
+            // id: `${this.props.book_sources[0]._id}`
+        }
+        return axios.get(url, { params: data }).then((res) => {
+            return Promise.resolve(res.data)
+        })
+    }
+
     componentDidMount () {
         this.getBookDetail()
     }
@@ -134,7 +156,8 @@ class BookDetail extends Component {
                     <DetailContent book = { book } 
                                    updated = { this.format(book.updated) } 
                                    textOfShelf = { textOfShelf }
-                                   onHandleShelf = { this.handleShelf.bind(this) } />
+                                   onHandleShelf = { this.handleShelf.bind(this) }
+                                   onHandleStartRead = { this.startRead.bind(this) } />
                     <div className = "detail-rate-wrapper">
                         <Rate title = {'追人气'} number = {(book.latelyFollower / 10000).toFixed(1) + '万'} />
                         <Rate title = {'读者留存率'} number = {book.retentionRatio + '%'} />
@@ -150,4 +173,19 @@ class BookDetail extends Component {
     }
 }
 
-export default BookDetail
+const mapStateToProps = (state) => {
+    return {
+        // linksReducer: state.linksReducer
+    }
+}
+
+const mapDispatchToProps  = (dispatch) => {
+    return {
+        initLinks: (links) => {
+            dispatch(initLinks(links))
+        }
+    }
+}
+
+// export default BookDetail
+export default connect(mapStateToProps, mapDispatchToProps)(BookDetail)

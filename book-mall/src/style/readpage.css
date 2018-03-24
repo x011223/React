@@ -152,3 +152,29 @@
     height: 100px;
     width: 100%;
 }
+
+.side-chapters-list {
+    position: absolute;
+    width: 78%;
+    left: 0;
+    top: 0;
+    background-color: navajowhite;
+    z-index: 999;
+}
+
+.side-list-back {
+    position: absolute;
+}
+
+.side-list-content {
+    position: absolute;
+    top: 0;
+    height: 100;
+    overflow: auto;
+    background-color: rgb(235, 235, 235);
+}
+
+.side-list-item {
+    color: #999;
+    padding: .5rem 1rem;
+}
