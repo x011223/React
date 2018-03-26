@@ -23,11 +23,11 @@ class ReadPage extends Component {
     }
 
     componentDidMount () {
+        this.getChapterContent(this.props.location.state.query.linkUrl)
+        this.handleScroll()
         this.setState(
             {order: +this.props.match.params.index + 1}
         )
-        this.getChapterContent(this.props.location.state.query.linkUrl)
-        this.handleScroll()
     }
 
     componentWillUnmount () {
@@ -42,6 +42,8 @@ class ReadPage extends Component {
             let hiddenDivPos = this.hiddenDiv && this.hiddenDiv.getBoundingClientRect().top
             let scrollY = window.scrollY
             let direction = scrollY - prevTop
+        let firstCount = 0
+            
             clearTimeout(timer)
             timer = setTimeout(() => {
                 if ((hiddenDivPos <= browerHeight + 400) && (direction > 0)) {
@@ -64,7 +66,7 @@ class ReadPage extends Component {
         })
     }
 
-    getChapterContent (linkUrl, operator) {
+    getChapterContent (linkUrl, operator, bookIndex) {
         this._getChapterContent(linkUrl).then((res) => {
             // let reg = /^\s{2,}/gm
             let regFormatLine = /\n/gm
@@ -75,11 +77,15 @@ class ReadPage extends Component {
             if (res.chapter.isVip) {
                 formatLine = ['这是付费章节']
             }
+            console.log(res)
             let objChapter = {
                     order: this.state.order,
                     title: res.chapter.title,
                     content: formatLine
                 }
+            if (this.state.isSideShow) {
+                objChapter.order = bookIndex
+            }
             this.state.chapters.map((item) => {
                 if (item.order === objChapter.order) {
                     isInChapters = true
@@ -102,7 +108,8 @@ class ReadPage extends Component {
                         {chapters: chaptersCache}
                     )
                 } else {
-                    console.log('此文章已缓存')
+                    console.log(objChapter.order)
+                    console.log(chapters[0].order)
                 }
             }         
         })
@@ -124,7 +131,7 @@ class ReadPage extends Component {
         } else {
             this.setState(
                 { 
-                    isOperatorShow: !this.state.isOperatorShow,
+                    isOperatorShow: !isOperatorShow,
                 }
             )
         }
@@ -174,17 +181,25 @@ class ReadPage extends Component {
         }
     }
 
-    _getNextChapter () {
+    _getNextChapter (f) {
         const { linksReducer } = this.props
+        if (this.state.order < 0 || this.state.order > linksReducer.linksReducer.length) {
+            alert("没有更多章节了")
+            return
+        }
         this.setState(
             {order: this.state.order + 1}
-        ) 
+        )
         const { order } = this.state
         this.getChapterContent(linksReducer.linksReducer[order].link, 'nextChapter')
     }
 
     _getPrevChapter () {
         const { linksReducer } = this.props
+        if (this.state.order < 0 || this.state.order > linksReducer.linksReducer.length) {
+            alert("没有更多章节了")
+            return
+        }
         this.setState(
             {order: this.state.order - 1}
         ) 
@@ -199,7 +214,12 @@ class ReadPage extends Component {
                 isOperatorShow: false,
             }
         )
-        console.log(this.props.linksReducer)
+    }
+
+    readSideChapter (index) {
+        const { linksReducer } = this.props
+        console.log(index)
+        this.getChapterContent(linksReducer.linksReducer[index + 1].link, '', index)
     }
 
     render () {
@@ -248,7 +268,8 @@ class ReadPage extends Component {
                     <span className = "side-list-back">{isSideShow ? '返回' : ''}</span>
                     <div className = "side-list-content">
                         {isSideShow ? this.props.linksReducer.linksReducer.map((chapter, order) => <li key = {order}
-                                        className = "side-list-item">
+                                        className = "side-list-item"
+                                        onClick = {this.readSideChapter.bind(this, order)}>
                                         <span>{chapter.title}</span>
                                     </li>)
                                     : ''}

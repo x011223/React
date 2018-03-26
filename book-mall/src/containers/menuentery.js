@@ -24,7 +24,6 @@ class MenuEntery extends Component {
 
     setBookSources () {
         this._setBookSources().then((res) => {
-            // this.props.setBookSources(res)
             localStorage.setItem('book_sources', JSON.stringify(res))
         })
     }

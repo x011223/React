@@ -3,9 +3,9 @@ import '../style/shelf.css'
 
 class ShelfBook extends Component {
     render () {
-        const { shelfBook, isDeleteShow, onhandleDeleteShelfBook } = this.props
+        const { shelfBook, isDeleteShow, onhandleDeleteShelfBook, handleShelfBookRead } = this.props
         return (
-            <li className = "shelf-book-item" id = "shelfBook">
+            <li className = "shelf-book-item" id = "shelfBook" onClick = {handleShelfBookRead.bind(this)}>
                 <img src = { `http://statics.zhuishushenqi.com${shelfBook.cover}` } className = "shelf-item-img" />
                 <div className = "shelf-item-bottom">
                     <span className = "shelf-item-author">{shelfBook.author}</span>

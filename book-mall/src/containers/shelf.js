@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
 import ShelfBook from '../components/shelf'
+import axios from 'axios'
+import { connect } from 'react-redux'
+import { initLinks } from '../actions/index'
+import { withRouter } from 'react-router-dom'
 import '../style/shelf.css'
 
 class ShelfBooks extends Component {
@@ -16,6 +20,7 @@ class ShelfBooks extends Component {
              this.setState(
                 {shelfBooks: shelfBook}
             ) 
+            this.getShelfBookSources()
         })
     }
 
@@ -49,6 +54,57 @@ class ShelfBooks extends Component {
         )
     }
 
+    _getShelfBookSources (_id) {
+        let url = '/api/getBookSource'
+        const data = {
+            id: _id
+        }
+        return axios.get(url, { params: data }).then((res) => {
+            return Promise.resolve(res.data)
+        })
+    }
+
+    getShelfBookSources () {
+        let { shelfBooks } = this.state
+        let shelfBookLength = shelfBooks.length
+        for (let i = 0; i < shelfBookLength; i++) {    
+            this._getShelfBookSources(shelfBooks[i]._id).then((res) => {
+                sessionStorage.setItem(`shelf_books_sources[${i}]`, JSON.stringify(res))
+            })
+        }
+    }
+
+    _getShelfBookChapters (index) {
+        let url = '/api/getBookChapters'
+        const data = {
+            id: `${JSON.parse(localStorage.getItem(`shelf_books_sources[${index}]`))[0]._id}`
+        }
+        return axios.get(url, { params: data }).then((res) => {
+            return Promise.resolve(res.data)
+        })
+    }
+
+    getShelfBookChapters (index) {
+        this._getShelfBookChapters(index).then((res) => {
+            let links = []
+            links = res.chapters
+            this.props.initLinks(links)
+            this.props.history.push(
+                { 
+                    pathname: `/chapter/${index}`}, 
+                    { 
+                        query: {linkUrl: this.props.linksReducer.linksReducer[0].link, 
+                        bookIndex: index
+                    }
+                }
+            )
+        })
+    }
+
+    shelfBookRead (book, index) {
+        this.getShelfBookChapters(index)
+    } 
+    
     render () {
         const { shelfBooks, isDeleteShow } = this.state
         return (
@@ -65,7 +121,8 @@ class ShelfBooks extends Component {
                                shelfBook = { shelfBook } 
                                shelfIndex = { index } 
                                isDeleteShow = { isDeleteShow }
-                               onhandleDeleteShelfBook = {this.handleDeleteShelfBook.bind(this, index)}/>) }
+                               onhandleDeleteShelfBook = { this.handleDeleteShelfBook.bind(this, index) }
+                               handleShelfBookRead = { this.shelfBookRead.bind(this, shelfBook, index) }/>) }
                 </div>
                 
             </div>
@@ -73,4 +130,18 @@ class ShelfBooks extends Component {
     }
 }
 
-export default ShelfBooks
+const mapStateToProps = (state) => {
+    return {
+        linksReducer: state.linksReducer
+    }
+}
+
+const mapDispatchToProps  = (dispatch) => {
+    return {
+        initLinks: (links) => {
+            dispatch(initLinks(links))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ShelfBooks))

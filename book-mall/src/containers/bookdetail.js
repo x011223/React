@@ -120,9 +120,7 @@ class BookDetail extends Component {
     }
 
     startRead () {
-        console.log(this.state.book)
         this._getChapters().then((res) => {
-            console.log(res)
             this.props.history.push({pathname: `/chapter/0`}, {query: {linkUrl: res.chapters[0].link}})
             this.props.initLinks(res.chapters)
         })
