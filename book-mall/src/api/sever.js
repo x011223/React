@@ -95,6 +95,24 @@ apiRoutes.get('/getBookChapters', function (req, res) {
     })
 })
 
+apiRoutes.get('/search', function (req, res) {
+    let url = encodeURI(`http://api.zhuishushenqi.com/book/fuzzy-search?query=${req.query.searchString}`)
+    //通过axios发送http请求,修改headers
+    // console.log(encodeURI(`http://api.zhuishushenqi.com/book/fuzzy-search?query=${req.query.searchString}`))
+    axios.get(url, {
+        headers: {
+          //发送http 请求修改referer,host
+          referer: 'http://m.zhuishushenqi.com/?from=www.zhuishushenqi.com',
+          //欺骗手段
+          host: 'm.zhuishushenqi.com'
+        },    
+    }).then((response) => {
+        res.json(response.data)
+    }).catch((e) => {
+        console.log(e)
+    })
+})
+
 // 获取章节内容
 // 章节列表得到  link
 apiRoutes.get('/getChapterContent', function (req, res) {

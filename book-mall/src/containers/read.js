@@ -42,8 +42,7 @@ class ReadPage extends Component {
             let hiddenDivPos = this.hiddenDiv && this.hiddenDiv.getBoundingClientRect().top
             let scrollY = window.scrollY
             let direction = scrollY - prevTop
-        let firstCount = 0
-            
+            let firstCount = 0
             clearTimeout(timer)
             timer = setTimeout(() => {
                 if ((hiddenDivPos <= browerHeight + 400) && (direction > 0)) {
@@ -77,7 +76,6 @@ class ReadPage extends Component {
             if (res.chapter.isVip) {
                 formatLine = ['这是付费章节']
             }
-            console.log(res)
             let objChapter = {
                     order: this.state.order,
                     title: res.chapter.title,
@@ -218,14 +216,16 @@ class ReadPage extends Component {
 
     readSideChapter (index) {
         const { linksReducer } = this.props
-        console.log(index)
         this.getChapterContent(linksReducer.linksReducer[index + 1].link, '', index)
     }
 
     render () {
-        const { isOperatorShow, fontSize, chapters, order, isSideShow } = this.state
+        const { isOperatorShow, fontSize, chapters, isSideShow, order } = this.state
+        console.log(chapters)
         return (
-            <div className = "read-page-wrapper" ref = {(div) => {this.readPageDiv = div}} style = {{fontSize: fontSize + 'px'}}>
+            <div className = "read-page-wrapper" 
+                 ref = {(div) => {this.readPageDiv = div}} 
+                 style = {{fontSize: fontSize + 'px'}}>
                 <div className = { isOperatorShow ? 'chapter-operator-top show-pannel' : 'chapter-operator-top' }>
                     <span className = "chapter-operator-back" onClick = {this.handleClickBack.bind(this)}>返回</span>
                     <span className = "chapter-operator-change">换源</span>
@@ -235,7 +235,7 @@ class ReadPage extends Component {
                         content = {chapter.content} 
                         onHandleShowOperator = {this.handleShowOperator.bind(this)}
                         key = { index }
-                        order = {order}
+                        order = { index }
                     />
                 )}
                 <div ref = {(div) => {this.hiddenDiv = div}} className = "hidden-div"></div>
@@ -259,9 +259,15 @@ class ReadPage extends Component {
                               >护眼</span>
                     </div>
                     <div className = "operator-line3">
-                        <span className = "operator-line3-prev"onClick = {this.handleNewChapter.bind(this, 'prevChapter')}>上一章</span>
+                        <a href = { `#chapter${order - 1}` }
+                            className = "operator-line3-prev"
+                            onClick = {this.handleNewChapter.bind(this, 'prevChapter')}
+                            >上一章</a>
                         <span className = "operator-line3-menu" onClick = {this.handleChapterLists.bind(this)}>目录</span>
-                        <span className = "operator-line3-next" onClick = {this.handleNewChapter.bind(this, 'nextChapter')}>下一章</span>
+                        <a href = { `#chapter${order - 1}` } 
+                            className = "operator-line3-next" 
+                            onClick = {this.handleNewChapter.bind(this, 'nextChapter')}
+                            >下一章</a>
                     </div>
                 </div>
                 <div className = "side-chapters-list">

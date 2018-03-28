@@ -77,7 +77,7 @@ class ShelfBooks extends Component {
     _getShelfBookChapters (index) {
         let url = '/api/getBookChapters'
         const data = {
-            id: `${JSON.parse(localStorage.getItem(`shelf_books_sources[${index}]`))[0]._id}`
+            id: `${JSON.parse(sessionStorage.getItem(`shelf_books_sources[${index}]`))[0]._id}`
         }
         return axios.get(url, { params: data }).then((res) => {
             return Promise.resolve(res.data)
@@ -102,7 +102,9 @@ class ShelfBooks extends Component {
     }
 
     shelfBookRead (book, index) {
-        this.getShelfBookChapters(index)
+        if (sessionStorage.getItem(`shelf_books_sources[${index}]`)) {
+            this.getShelfBookChapters(index)
+        }
     } 
     
     render () {

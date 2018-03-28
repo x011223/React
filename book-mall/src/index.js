@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom"
 import './style/index.css'
 import Mine from './components/mine'
-import Search from './components/search'
+import Search from './containers/search'
 import Home from './components/home'
 import Rank from './containers/rank'
 import BookDetail from './containers/bookdetail'
