@@ -139,6 +139,10 @@
     border: 1px solid #888277;
 }
 
+.operator-line3 {
+    text-align: center;
+}
+
 .operator-line3 > span {
     display: inline-block;
     width: 25.33%;
@@ -177,4 +181,8 @@
 .side-list-item {
     color: #999;
     padding: .5rem 1rem;
+}
+
+.content-hide {
+    overflow: hidden;
 }

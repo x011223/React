@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Search from '../components/search'
 import axios from 'axios'
+import '../style/search.css'
+
 let searchString
+
 class SearchWrapper extends Component {
     constructor () {
         super()
@@ -11,36 +14,17 @@ class SearchWrapper extends Component {
         }
     }
 
-    componentWillUnmount () {
-        window.removeEventListener('keyup', this.getSearchString)
-    }
-
-    debounce (func, wait) {
-        let timer
-        return function (...args) {
-            if (timer) {
-                clearTimeout(timer)
-            }
-            timer = setTimeout(() => {
-                func.apply(this, args)
-            }, wait);
-        }
-    }
-
-    handleChangeText (e) {
-        // let func = this.search()
-        // let tim = null
-        // let target = e.target
-        // let value = target.value
-        // window.addEventListener('keyup', function getSearchString () {
-        //     clearTimeout(tim)
-        //     tim = setTimeout((value) => {
-        //         searchString = value
-        //     }, 300);
-        //     this.debounce(func, 500)  
-        // }.bind(this))
-        this.search(e)
-    }
+    // debounce (func, wait) {
+    //     let timer
+    //     return function (...args) {
+    //         if (timer) {
+    //             clearTimeout(timer)
+    //         }
+    //         timer = setTimeout(() => {
+    //             func.apply(this, args)
+    //         }, wait);
+    //     }
+    // }
 
     _search (string) {
         let url = '/api/search'
@@ -52,41 +36,36 @@ class SearchWrapper extends Component {
         })
     }
 
-    search (e) {
-        // const { searchString } = this.state
-        let value = e.target.value
-        let a = this._search(value).then((res) => {
+    search (value) {
+        this._search(value).then((res) => {
             this.setState(
                 { searchResult: res.books }
             )
         })
-        this.debounce(a, 500)
-        // let timer = null
-        // clearTimeout(timer)
-        // let a = e.target.value
-        // timer = setTimeout(() => {
-        //     let value = a
-        //     console.log(value)
-        //     this._search(value).then((res) => {
-        //         this.setState(
-        //             { searchResult: res.books }
-        //         )
-        //     })
-        // }, 500)
+    }
+
+    handleClickSearch () {
+        let value = this.searchInput.value
+        this.search(value)
     }
 
     render () {
         const { searchResult } = this.state
         return (
-            <div>
-                <div>
+            <div className = "search">
+                <div className = "search-input">
                     <input 
+                        ref = { (input) => { this.searchInput = input } }
                         placeholder = '请输入关键词' 
                         style = {{ 'textIndent': 16 }}
                         value = { searchString }
-                        onChange = { this.handleChangeText.bind(this) } />
+                        className = "input"
+                        />
+                    <div onClick = { this.handleClickSearch.bind(this) } className = "search-text" >
+                        搜索
+                    </div>
                 </div>
-                <div>
+                <div className = "search-result">
                     <Search resultBooks = { searchResult } />
                 </div>
             </div>

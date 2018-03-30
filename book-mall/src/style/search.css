@@ -1,0 +1,25 @@
+.search {
+    margin-top: 1rem;
+    position: relative;
+}
+
+.search-input {
+    text-align: center;
+}
+
+.input {
+    width: 70%;
+    height: 1.33rem;
+    border-radius: 3px;
+}
+
+.search-text {
+    display: inline-block;
+    font-size: 1.33rem;
+    font-weight: 300;
+    line-height: 1.33rem;
+}
+
+.search-result {
+    /* margin-top: 4.53rem; */
+}

@@ -35,23 +35,23 @@ class ReadPage extends Component {
     }
 
     handleScroll () {
-        let browerHeight = document.documentElement.clientHeight  
-        let timer = null
-        let prevTop = 0
-        window.addEventListener('scroll', function getPosTop ()  {
-            let hiddenDivPos = this.hiddenDiv && this.hiddenDiv.getBoundingClientRect().top
-            let scrollY = window.scrollY
-            let direction = scrollY - prevTop
-            let firstCount = 0
-            clearTimeout(timer)
-            timer = setTimeout(() => {
-                if ((hiddenDivPos <= browerHeight + 400) && (direction > 0)) {
-                    this.handleNewChapter('nextChapter')
-                } else {
-                    return
-                }
-            }, 200)   
-        }.bind(this))  
+        // let browerHeight = document.documentElement.clientHeight  
+        // let timer = null
+        // let prevTop = 0
+        // window.addEventListener('scroll', function getPosTop ()  {
+        //     let hiddenDivPos = this.hiddenDiv && this.hiddenDiv.getBoundingClientRect().top
+        //     let scrollY = window.scrollY
+        //     let direction = scrollY - prevTop
+        //     let firstCount = 0
+        //     clearTimeout(timer)
+        //     timer = setTimeout(() => {
+        //         if ((hiddenDivPos <= browerHeight + 400) && (direction > 0)) {
+        //             this.handleNewChapter('nextChapter')
+        //         } else {
+        //             return
+        //         }
+        //     }, 200)   
+        // }.bind(this))  
     }
     
     _getChapterContent (linkUrl) {
@@ -166,7 +166,10 @@ class ReadPage extends Component {
         )
     }
 
-    handleNewChapter (operator) {
+    handleNewChapter (operator, url, time) {
+        if (url === 'chapter0' && operator === 'prevChapter') {
+            alert("没有更多章节了")
+        }
         switch (operator) {
             case 'nextChapter':
                 this._getNextChapter()
@@ -177,6 +180,7 @@ class ReadPage extends Component {
             default:
                 return
         }
+        setTimeout("top.location.href = '" + url + "'", time)
     }
 
     _getNextChapter (f) {
@@ -221,7 +225,6 @@ class ReadPage extends Component {
 
     render () {
         const { isOperatorShow, fontSize, chapters, isSideShow, order } = this.state
-        console.log(chapters)
         return (
             <div className = "read-page-wrapper" 
                  ref = {(div) => {this.readPageDiv = div}} 
@@ -230,14 +233,16 @@ class ReadPage extends Component {
                     <span className = "chapter-operator-back" onClick = {this.handleClickBack.bind(this)}>返回</span>
                     <span className = "chapter-operator-change">换源</span>
                 </div>
-                { chapters.map((chapter, index) => 
-                    <Read title = {chapter.title} 
-                        content = {chapter.content} 
-                        onHandleShowOperator = {this.handleShowOperator.bind(this)}
-                        key = { index }
-                        order = { index }
-                    />
-                )}
+                <div className = { isSideShow ? 'content-hide' : '' } >
+                    { chapters.map((chapter, index) => 
+                        <Read title = {chapter.title} 
+                            content = {chapter.content} 
+                            onHandleShowOperator = {this.handleShowOperator.bind(this)}
+                            key = { index }
+                            order = { index }
+                        />
+                    )}
+                </div>
                 <div ref = {(div) => {this.hiddenDiv = div}} className = "hidden-div"></div>
                 <div className = { isOperatorShow ? 'chapter-operator-bottom show-pannel' : 'chapter-operator-bottom'}>
                     <div className = "operator-line1">
@@ -259,14 +264,14 @@ class ReadPage extends Component {
                               >护眼</span>
                     </div>
                     <div className = "operator-line3">
-                        <a href = { `#chapter${order - 1}` }
+                        <a
                             className = "operator-line3-prev"
-                            onClick = {this.handleNewChapter.bind(this, 'prevChapter')}
+                            onClick = {this.handleNewChapter.bind(this, 'prevChapter', `#chapter${order - 1}`, 500)}
                             >上一章</a>
                         <span className = "operator-line3-menu" onClick = {this.handleChapterLists.bind(this)}>目录</span>
-                        <a href = { `#chapter${order - 1}` } 
+                        <a
                             className = "operator-line3-next" 
-                            onClick = {this.handleNewChapter.bind(this, 'nextChapter')}
+                            onClick = {this.handleNewChapter.bind(this, 'nextChapter', `#chapter${order + 1}`, 500)}
                             >下一章</a>
                     </div>
                 </div>

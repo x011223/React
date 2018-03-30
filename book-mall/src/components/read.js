@@ -8,7 +8,7 @@ class Read extends Component {
         return (
             <div className = "chapter">
                 <div className = "chapter-content" onClick = {onHandleShowOperator.bind(this)}>
-                    <p id = {'chapter' + order} className = "chapter-content-title">{title}</p>
+                    <p id = {'chapter' + (+order + 1)} className = "chapter-content-title">{title}</p>
                     {content.map((item, index) =>
                         <p key = { index } className = "chapter-content-para">{item}</p>
                     )}
