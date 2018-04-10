@@ -186,3 +186,18 @@
 .content-hide {
     overflow: hidden;
 }
+
+.sources-list {
+    position: fixed;
+    top: 2.7333rem;
+    right: 0;
+    width: 7rem;
+    color: #fff;
+    text-align: center;
+    background-color: rgba(50, 51, 52, 0.9);
+    border-radius: 15px;
+}
+
+.sources-list-item {
+    padding: .25rem 0;
+}

@@ -3,6 +3,7 @@ import Read from '../components/read'
 import '../style/readpage.css'
 import axios from 'axios'
 import { connect } from 'react-redux'
+import SourcesWrapper from '../containers/sources'
 
 class ReadPage extends Component {
     constructor () {
@@ -18,7 +19,8 @@ class ReadPage extends Component {
                 content: [],
             }],
             order: '',
-            isSideShow: false
+            isSideShow: false,
+            isSourcesShow: false
         }
     }
 
@@ -35,50 +37,51 @@ class ReadPage extends Component {
     }
 
     handleScroll () {
-        // let browerHeight = document.documentElement.clientHeight  
-        // let timer = null
-        // let prevTop = 0
-        // window.addEventListener('scroll', function getPosTop ()  {
-        //     let hiddenDivPos = this.hiddenDiv && this.hiddenDiv.getBoundingClientRect().top
-        //     let scrollY = window.scrollY
-        //     let direction = scrollY - prevTop
-        //     let firstCount = 0
-        //     clearTimeout(timer)
-        //     timer = setTimeout(() => {
-        //         if ((hiddenDivPos <= browerHeight + 400) && (direction > 0)) {
-        //             this.handleNewChapter('nextChapter')
-        //         } else {
-        //             return
-        //         }
-        //     }, 200)   
-        // }.bind(this))  
+        let browerHeight = document.documentElement.clientHeight  
+        let timer = null
+        let prevTop = 0
+        window.addEventListener('scroll', function getPosTop ()  {
+            let hiddenDivPos = this.hiddenDiv && this.hiddenDiv.getBoundingClientRect().top
+            let scrollY = window.scrollY
+            let direction = scrollY - prevTop
+            let firstCount = 0
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                if ((hiddenDivPos <= browerHeight + 400) && (direction > 0)) {
+                    this.handleNewChapter('nextChapter')
+                } else {
+                    return
+                }
+            }, 200)   
+        }.bind(this))  
     }
     
     _getChapterContent (linkUrl) {
+        console.log(linkUrl)
         let url = '/api/getChapterContent'
         const data = {
             // link: this.props.location.state.query.linkUrl
             link: linkUrl
         }
-        return axios.get(url, { params: data }).then((res) => {
-            return Promise.resolve(res.data)
-        })
+        return axios.get(url, { params: data })
     }
 
     getChapterContent (linkUrl, operator, bookIndex) {
+        console.log(linkUrl)
         this._getChapterContent(linkUrl).then((res) => {
+            console.log("正在获取")
             // let reg = /^\s{2,}/gm
             let regFormatLine = /\n/gm
             let regExtraTitle = /(\u7b2c.*\u7ae0.*\n)/gm
-            let removeExtraTitle = res.chapter.cpContent.replace(regExtraTitle, '')
+            let removeExtraTitle = res.data.chapter.cpContent.replace(regExtraTitle, '')
             let formatLine = removeExtraTitle.split(regFormatLine)
             let isInChapters = false
-            if (res.chapter.isVip) {
+            if (res.data.chapter.isVip) {
                 formatLine = ['这是付费章节']
             }
             let objChapter = {
                     order: this.state.order,
-                    title: res.chapter.title,
+                    title: res.data.chapter.title,
                     content: formatLine
                 }
             if (this.state.isSideShow) {
@@ -88,7 +91,7 @@ class ReadPage extends Component {
                 if (item.order === objChapter.order) {
                     isInChapters = true
                 } 
-            })              
+            })             
             const { chapters } = this.state
             if (!chapters[0].title) {
                 this.setState(
@@ -96,6 +99,9 @@ class ReadPage extends Component {
                 )
             } else {
                 let chaptersCache = chapters
+                console.log(chaptersCache)
+                console.log(objChapter)
+                console.log(this.state.chapters)
                 if ((objChapter.order > chapters[chapters.length - 1].order) && !isInChapters) {        
                     this.setState(
                         {chapters: [...chaptersCache, objChapter]}
@@ -105,11 +111,22 @@ class ReadPage extends Component {
                     this.setState(
                         {chapters: chaptersCache}
                     )
+                } else if ((objChapter.order === chapters[0].order) && isInChapters) { 
+                    // console.log(chaptersCache)
+                    // console.log(objChapter)
+                    // console.log(this.state.chapters)
+                    alert("不对啊")
+                    // this.setState(
+                    //     { chapters: chaptersCache.push(objChapter) }
+                    // )
                 } else {
-                    console.log(objChapter.order)
-                    console.log(chapters[0].order)
+                    // console.log(objChapter.order)
+                    // console.log(chapters[0].order)
+                    alert("出错了")
                 }
             }         
+        }).catch((rej) => {
+            console.log(rej)
         })
     }
 
@@ -118,12 +135,13 @@ class ReadPage extends Component {
     }
 
     handleShowOperator () {
-        const {isOperatorShow, isSideShow} = this.state
-        if (isSideShow) {
+        const { isOperatorShow, isSideShow, isSourcesShow } = this.state
+        if (isSideShow || isSourcesShow) {
             this.setState(
                 { 
                     isOperatorShow: false,
-                    isSideShow: false
+                    isSideShow: false,
+                    isSourcesShow: false
                 }
             )
         } else {
@@ -133,7 +151,6 @@ class ReadPage extends Component {
                 }
             )
         }
-        
     }
 
     changeColor (model) {
@@ -223,15 +240,28 @@ class ReadPage extends Component {
         this.getChapterContent(linksReducer.linksReducer[index + 1].link, '', index)
     }
 
+    _changeSources (index) {
+        this.setState(
+            { isSourcesShow: !this.state.isSourcesShow }
+        )
+    }
+    
+    changeSources (index) {
+        const _sources = JSON.parse(localStorage.getItem('book_sources'))
+        let link = _sources[index].link
+        this.getChapterContent(link,'','')
+        console.log("成功获取")
+    }
+
     render () {
-        const { isOperatorShow, fontSize, chapters, isSideShow, order } = this.state
+        const { isOperatorShow, fontSize, chapters, isSideShow, order, isSourcesShow } = this.state
         return (
             <div className = "read-page-wrapper" 
                  ref = {(div) => {this.readPageDiv = div}} 
                  style = {{fontSize: fontSize + 'px'}}>
                 <div className = { isOperatorShow ? 'chapter-operator-top show-pannel' : 'chapter-operator-top' }>
                     <span className = "chapter-operator-back" onClick = {this.handleClickBack.bind(this)}>返回</span>
-                    <span className = "chapter-operator-change">换源</span>
+                    <span className = "chapter-operator-change" onClick = { this._changeSources.bind(this) }>换源</span>
                 </div>
                 <div className = { isSideShow ? 'content-hide' : '' } >
                     { chapters.map((chapter, index) => 
@@ -285,8 +315,11 @@ class ReadPage extends Component {
                                     </li>)
                                     : ''}
                     </div>
-                    
                 </div>
+                <div className = "sources-list">
+                    { isSourcesShow ? <SourcesWrapper changeSources = { this.changeSources.bind(this) } /> : '' }
+                </div>
+                
             </div>   
         )
     }

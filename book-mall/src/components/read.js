@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import '../style/readpage.css'
 
 class Read extends Component {
