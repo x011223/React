@@ -5,6 +5,8 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import SourcesWrapper from '../containers/sources'
 
+let Once = true
+
 class ReadPage extends Component {
     constructor () {
         super()
@@ -40,20 +42,48 @@ class ReadPage extends Component {
         let browerHeight = document.documentElement.clientHeight  
         let timer = null
         let prevTop = 0
+        let onceFlag = true
         window.addEventListener('scroll', function getPosTop ()  {
             let hiddenDivPos = this.hiddenDiv && this.hiddenDiv.getBoundingClientRect().top
             let scrollY = window.scrollY
             let direction = scrollY - prevTop
-            let firstCount = 0
+            let isOnce = true
             clearTimeout(timer)
             timer = setTimeout(() => {
                 if ((hiddenDivPos <= browerHeight + 400) && (direction > 0)) {
-                    this.handleNewChapter('nextChapter')
+                    if (onceFlag) {
+                        onceFlag = false
+                        let onceAAA = this.once(this.onceC.bind(this))
+                        console.log("执行一次")
+                        onceAAA()
+                    } else {
+                        this.handleNewChapter('nextChapter')
+                    }
                 } else {
                     return
                 }
             }, 200)   
         }.bind(this))  
+    }
+
+    onceC () {
+        const { linksReducer } = this.props
+        const { order } = this.state
+        this.getChapterContent(linksReducer.linksReducer[order].link, 'nextChapter')
+    }
+
+    once (func) {
+        let ran, result;
+        return function() {
+            if (ran) {
+                return result;
+            }
+            ran = true;
+            result = func.apply(this);
+            // clear the `func` variable so the function may be garbage collected
+            func = null;
+            return result;
+        };
     }
     
     _getChapterContent (linkUrl) {
@@ -67,9 +97,7 @@ class ReadPage extends Component {
     }
 
     getChapterContent (linkUrl, operator, bookIndex) {
-        console.log(linkUrl)
         this._getChapterContent(linkUrl).then((res) => {
-            console.log("正在获取")
             // let reg = /^\s{2,}/gm
             let regFormatLine = /\n/gm
             let regExtraTitle = /(\u7b2c.*\u7ae0.*\n)/gm
@@ -88,10 +116,10 @@ class ReadPage extends Component {
                 objChapter.order = bookIndex
             }
             this.state.chapters.map((item) => {
-                if (item.order === objChapter.order) {
+                if (item.order === objChapter.order && objChapter.order !== 0) {
                     isInChapters = true
                 } 
-            })             
+            })        
             const { chapters } = this.state
             if (!chapters[0].title) {
                 this.setState(
@@ -99,9 +127,6 @@ class ReadPage extends Component {
                 )
             } else {
                 let chaptersCache = chapters
-                console.log(chaptersCache)
-                console.log(objChapter)
-                console.log(this.state.chapters)
                 if ((objChapter.order > chapters[chapters.length - 1].order) && !isInChapters) {        
                     this.setState(
                         {chapters: [...chaptersCache, objChapter]}
@@ -112,16 +137,10 @@ class ReadPage extends Component {
                         {chapters: chaptersCache}
                     )
                 } else if ((objChapter.order === chapters[0].order) && isInChapters) { 
-                    // console.log(chaptersCache)
-                    // console.log(objChapter)
-                    // console.log(this.state.chapters)
-                    alert("不对啊")
-                    // this.setState(
-                    //     { chapters: chaptersCache.push(objChapter) }
-                    // )
+                    this.setState(
+                        { chapters: [...chaptersCache, objChapter] }
+                    )
                 } else {
-                    // console.log(objChapter.order)
-                    // console.log(chapters[0].order)
                     alert("出错了")
                 }
             }         
@@ -183,10 +202,10 @@ class ReadPage extends Component {
         )
     }
 
-    handleNewChapter (operator, url, time) {
-        if (url === 'chapter0' && operator === 'prevChapter') {
-            alert("没有更多章节了")
-        }
+    handleNewChapter (operator, isOnce) {
+        // if (url === 'chapter0' && operator === 'prevChapter') {
+        //     alert("没有更多章节了")
+        // }
         switch (operator) {
             case 'nextChapter':
                 this._getNextChapter()
@@ -197,17 +216,13 @@ class ReadPage extends Component {
             default:
                 return
         }
-        setTimeout("top.location.href = '" + url + "'", time)
+        // setTimeout("top.location.href = '" + url + "'", time)
     }
 
-    _getNextChapter (f) {
+    _getNextChapter () {
         const { linksReducer } = this.props
-        if (this.state.order < 0 || this.state.order > linksReducer.linksReducer.length) {
-            alert("没有更多章节了")
-            return
-        }
         this.setState(
-            {order: this.state.order + 1}
+            { order: this.state.order + 1 }
         )
         const { order } = this.state
         this.getChapterContent(linksReducer.linksReducer[order].link, 'nextChapter')
@@ -250,7 +265,6 @@ class ReadPage extends Component {
         const _sources = JSON.parse(localStorage.getItem('book_sources'))
         let link = _sources[index].link
         this.getChapterContent(link,'','')
-        console.log("成功获取")
     }
 
     render () {
@@ -296,12 +310,12 @@ class ReadPage extends Component {
                     <div className = "operator-line3">
                         <a
                             className = "operator-line3-prev"
-                            onClick = {this.handleNewChapter.bind(this, 'prevChapter', `#chapter${order - 1}`, 500)}
+                            onClick = {this.handleNewChapter.bind(this, 'prevChapter')}
                             >上一章</a>
                         <span className = "operator-line3-menu" onClick = {this.handleChapterLists.bind(this)}>目录</span>
                         <a
                             className = "operator-line3-next" 
-                            onClick = {this.handleNewChapter.bind(this, 'nextChapter', `#chapter${order + 1}`, 500)}
+                            onClick = {this.handleNewChapter.bind(this, 'nextChapter')}
                             >下一章</a>
                     </div>
                 </div>
