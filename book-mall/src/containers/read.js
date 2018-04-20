@@ -5,8 +5,6 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import SourcesWrapper from '../containers/sources'
 
-let Once = true
-
 class ReadPage extends Component {
     constructor () {
         super()
@@ -47,15 +45,13 @@ class ReadPage extends Component {
             let hiddenDivPos = this.hiddenDiv && this.hiddenDiv.getBoundingClientRect().top
             let scrollY = window.scrollY
             let direction = scrollY - prevTop
-            let isOnce = true
             clearTimeout(timer)
             timer = setTimeout(() => {
                 if ((hiddenDivPos <= browerHeight + 400) && (direction > 0)) {
                     if (onceFlag) {
                         onceFlag = false
-                        let onceAAA = this.once(this.onceC.bind(this))
-                        console.log("执行一次")
-                        onceAAA()
+                        let justOnce = this.once(this.onlyOnce.bind(this))
+                        justOnce()
                     } else {
                         this.handleNewChapter('nextChapter')
                     }
@@ -66,7 +62,7 @@ class ReadPage extends Component {
         }.bind(this))  
     }
 
-    onceC () {
+    onlyOnce () {
         const { linksReducer } = this.props
         const { order } = this.state
         this.getChapterContent(linksReducer.linksReducer[order].link, 'nextChapter')
@@ -200,6 +196,8 @@ class ReadPage extends Component {
                 fontSize: this.state.fontSize + symbol
             }
         )
+        let storageFontSize = this.state.fontSize
+        localStorage.setItem('storageFontSize', storageFontSize)
     }
 
     handleNewChapter (operator, isOnce) {
@@ -269,10 +267,12 @@ class ReadPage extends Component {
 
     render () {
         const { isOperatorShow, fontSize, chapters, isSideShow, order, isSourcesShow } = this.state
+        const storageFontSize = localStorage.getItem('storageFontSize') || fontSize
+        // const likeSize = storageFontSize ? localStorage.getItem('storageFontSize') : fontSize
         return (
             <div className = "read-page-wrapper" 
                  ref = {(div) => {this.readPageDiv = div}} 
-                 style = {{fontSize: fontSize + 'px'}}>
+                 style = {{fontSize: storageFontSize + 'px'}}>
                 <div className = { isOperatorShow ? 'chapter-operator-top show-pannel' : 'chapter-operator-top' }>
                     <span className = "chapter-operator-back" onClick = {this.handleClickBack.bind(this)}>返回</span>
                     <span className = "chapter-operator-change" onClick = { this._changeSources.bind(this) }>换源</span>
@@ -292,7 +292,7 @@ class ReadPage extends Component {
                     <div className = "operator-line1">
                         <span className = "operator-line1-sub" onClick = {this.handleSize.bind(this, 10, -2)}>A-</span>
                         <span className = "operator-line1-line">
-                            <span style = {{ width: 30 + 5 * (fontSize - 16) + '%' }}></span>
+                            <span style = {{ width: 30 + 5 * (storageFontSize - 16) + '%' }}></span>
                         </span>
                         <span className = "operator-line1-add" onClick = {this.handleSize.bind(this, 30, 2)}>A+</span>
                     </div>

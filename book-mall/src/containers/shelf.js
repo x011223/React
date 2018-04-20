@@ -117,16 +117,16 @@ class ShelfBooks extends Component {
                             isDeleteShow && shelfBooks.length ? '完成' : '编辑'}
                     </span>
                 </div>
-                <div>
-                    { shelfBooks.map((shelfBook, index) =>
+                <div className = { shelfBooks.length ? '' : 'shelf-books' }>
+                    { shelfBooks.length ? shelfBooks.map((shelfBook, index) =>
                         <ShelfBook key = { index } 
                                shelfBook = { shelfBook } 
                                shelfIndex = { index } 
                                isDeleteShow = { isDeleteShow }
                                onhandleDeleteShelfBook = { this.handleDeleteShelfBook.bind(this, index) }
-                               handleShelfBookRead = { this.shelfBookRead.bind(this, shelfBook, index) }/>) }
+                               handleShelfBookRead = { this.shelfBookRead.bind(this, shelfBook, index) }/>)
+                        : '书架没有书喔' }
                 </div>
-                
             </div>
         )
     }
