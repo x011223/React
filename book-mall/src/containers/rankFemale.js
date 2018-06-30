@@ -4,7 +4,6 @@ import axios from 'axios'
 import '../style/rank.css'
 
 class RankMale extends Component {
-
     constructor () {
         super()
         this.state = {
