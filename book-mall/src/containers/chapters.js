@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { initLinks } from '../actions/index'
 
 class ChapterList extends Component {
-    constructor () {
+    constructor() {
         super()
         this.state = {
             chapters: [],
@@ -15,31 +15,31 @@ class ChapterList extends Component {
         }
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.getChapters()
     }
 
-    _back () {
+    _back() {
         this.props.history.goBack()
     }
 
-    _getChapters () {
+    _getChapters() {
         let url = '/api/getBookChapters'
         const data = {
             id: `${JSON.parse(localStorage.getItem('book_sources'))[0]._id}`
-            // id: `${this.props.book_sources[0]._id}`
+                // id: `${this.props.book_sources[0]._id}`
         }
         return axios.get(url, { params: data }).then((res) => {
             return Promise.resolve(res.data)
         })
     }
 
-    getChapters () {
+    getChapters() {
         this._getChapters().then((res) => {
             let links = []
-            // for (let i = 0; i < res.chapters.length; i++) {
-            //     links.push(res.chapters[i])              
-            // }
+                // for (let i = 0; i < res.chapters.length; i++) {
+                //     links.push(res.chapters[i])              
+                // }
             links = res.chapters
             this.props.initLinks(links)
             this.setState({
@@ -49,27 +49,26 @@ class ChapterList extends Component {
         })
     }
 
-    handleClickChapter (index, link) {
-        this.props.history.push({pathname: `/chapter/${index}`}, {query: {linkUrl: link}})
+    handleClickChapter(index, link) {
+        this.props.history.push({ pathname: `/chapter/${index}` }, { query: { linkUrl: link } })
     }
 
-    handleReverse () {
+    handleReverse() {
         let chaptersReverse = this.state.chapters
-        this.setState(
-            {chapters: chaptersReverse.reverse()}
-        )
+        this.setState({ chapters: chaptersReverse.reverse() })
     }
 
-    render () {
-        return (
-            <div className = "chapters">
-                <Chapters chapters = { this.state.chapters } 
-                          name = { this.state.sourceName }
-                          count = { this.state.chapters.length }
-                          handleBack = { this._back.bind(this) } 
-                          onhandleClickChapter = { this.handleClickChapter.bind(this) }
-                          onhandleReverse = { this.handleReverse.bind(this) }/>
-            </div>
+    render() {
+        return ( <
+            div className = "chapters" >
+            <
+            Chapters chapters = { this.state.chapters }
+            name = { this.state.sourceName }
+            count = { this.state.chapters.length }
+            handleBack = { this._back.bind(this) }
+            onhandleClickChapter = { this.handleClickChapter.bind(this) }
+            onhandleReverse = { this.handleReverse.bind(this) }
+            /> </div >
         )
     }
 }
@@ -80,13 +79,13 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps  = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         initLinks: (links) => {
             dispatch(initLinks(links))
         }
     }
 }
- 
+
 // export default ChapterList
 export default connect(mapStateToProps, mapDispatchToProps)(ChapterList)
