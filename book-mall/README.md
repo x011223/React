@@ -50,12 +50,22 @@
 4. 组件传值
 
 ## 运行界面
-![first-page](./preview/first-page.jpg)![shelf](./preview/shelf.jpg)![in-shelf](./preview/in-shelf.jpg)
+<center>
+<img src="./preview/first-page.jpg" width="240px" height="400px">
+<img src="./preview/shelf.jpg" width="260px" height="400px">
+<img src="./preview/in-shelf.jpg" width="260px" height="400px">
+</center>
 
 -------
-
-![rank-list](./preview/rank-list.jpg)![read-page](./preview/read-page.jpg)![night](./preview/night.jpg)
+<center>
+<img src="./preview/rank-list.jpg" width="260px" height="400px">
+<img src="./preview/read-page.jpg" width="260px" height="400px">
+<img src="./preview/night.jpg" width="260px" height="400px">
+</center>
 
 -------
-
-![book-detail](./preview/book-detail.jpg)![search](./preview/search.jpg)![chapters](./preview/chapters.jpg)
+<center>
+<img src="./preview/book-detail.jpg" width="260px" height="400px">
+<img src="./preview/search.jpg" width="260px" height="400px">
+<img src="./preview/chapters.jpg" width="260px" height="400px">
+</center>
