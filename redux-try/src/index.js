@@ -21,24 +21,28 @@
 // }
 
 
-function createStore (reducer) {
+function createStore(reducer) {
     let state = null
     const listeners = []
-    // 监听数据变化
+        // 监听数据变化
     const subscribe = (listener) => listeners.push(listener)
-    // 获取数据内容
+        // 获取数据内容
     const getState = () => state
-    // 提交数据更改
+        // 提交数据更改
     const dispatch = (action) => {
-        state = reducer(state, action)
-        listeners.forEach((listener) => listener())
+            state = reducer(state, action)
+            listeners.forEach((listener) => listener())
+        }
+        // 初始化数据
+    dispatch({})
+    return {
+        getState,
+        dispatch,
+        subscribe
     }
-    // 初始化数据
-    dispatch( { } )
-    return { getState, dispatch, subscribe }
 }
 
-function storeChange (state, action) {
+function storeChange(state, action) {
     if (!state) {
         return {
             title: {
@@ -49,12 +53,12 @@ function storeChange (state, action) {
                 text: 'React.js 小书内容',
                 color: 'blue'
             }
-        } 
+        }
     }
     switch (action.type) {
         case 'UPDATE_TITLE_TEXT':
             return {
-                ...state,  
+                ...state,
                 title: {
                     ...state.title,
                     text: action.text
@@ -98,7 +102,7 @@ store.subscribe(() => {
 //     }
 // }
 
-function renderApp (newState, oldState = { }) {
+function renderApp(newState, oldState = {}) {
     if (oldState === newState) {
         return
     }
@@ -106,7 +110,7 @@ function renderApp (newState, oldState = { }) {
     renderContent(newState.content, oldState.content)
 }
 
-function renderTitle (newTitle, oldTitle = {}) {
+function renderTitle(newTitle, oldTitle = {}) {
     if (oldTitle === newTitle) {
         return
     }
@@ -115,7 +119,7 @@ function renderTitle (newTitle, oldTitle = {}) {
     titleDOM.style.color = newTitle.color
 }
 
-function renderContent (newContent, oldContent = {}) {
+function renderContent(newContent, oldContent = {}) {
     if (oldContent === newContent) {
         return
     }
@@ -126,9 +130,15 @@ function renderContent (newContent, oldContent = {}) {
 
 renderApp(store.getState())
 
-store.dispatch({ type: 'UPDATE_TITLE_TEXT', text: '《React.js 小书》' }) // 修改标题文本
-store.dispatch({ type: 'UPDATE_TITLE_COLOR', color: 'lightblue' }) // 修改标题颜色
-// renderApp(store.getState()) // 把新的数据渲染到页面上
+store.dispatch({
+        type: 'UPDATE_TITLE_TEXT',
+        text: '《React.js 小书》'
+    }) // 修改标题文本
+store.dispatch({
+        type: 'UPDATE_TITLE_COLOR',
+        color: 'lightblue'
+    }) // 修改标题颜色
+    // renderApp(store.getState()) // 把新的数据渲染到页面上
 
 // class App extends Component {
 //     render () {
